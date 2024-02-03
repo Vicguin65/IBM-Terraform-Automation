@@ -1,0 +1,9 @@
+This week we completed:
+    -   list, create, and delete groups
+    -   list, create, and delete users
+
+
+
+Next week:
+    -   Create REST API using AWS Lambda
+        - How will we authenticate?
