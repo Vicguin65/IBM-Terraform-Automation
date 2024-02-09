@@ -91,7 +91,7 @@ def create_random_groups(client, store_id, amount: int):
         name = 'Test Group ' + str(i)
         create_group(client, store_id, name)
 
-def main():
+if __name__ == '__main__':
     # Create Identity Store client
     client = boto3.client('identitystore', region_name='us-west-1')
     store_id = 'd-916710dec9'
@@ -103,12 +103,9 @@ def main():
     pp.pprint(response)
 
     # Create random amount of groups
-    num_groups = 1000
-    create_random_groups(client, id, num_groups)
-    response = list_group(client, id)
+    num_groups = 400
+    create_random_groups(client, store_id, num_groups)
+    response = list_group(client, store_id)
     # List the groups
     pp.pprint(response)
-    
-    return
 
-main()
