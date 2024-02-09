@@ -109,7 +109,6 @@ def create_user(client, identity_store_id, username, first_name, last_name,
         'Formatted': 'string',
         'FamilyName': last_name,
         'GivenName': first_name,
-        'MiddleName': middle_name,
     },
 }
 
@@ -119,7 +118,8 @@ def create_user(client, identity_store_id, username, first_name, last_name,
         request_params['DisplayName'] = display_name
     else:
         request_params['DisplayName'] = first_name + " " + last_name
-    
+    if middle_name:
+        request_params["Name"]["MiddleName"] = middle_name
     if profile_url:
         request_params['ProfileUrl'] = profile_url
     if emails:
@@ -144,11 +144,19 @@ def create_user(client, identity_store_id, username, first_name, last_name,
 
 
 #lists all users in identity store using BOTO3
-def list_users(client, id, max_results):
-    return client.list_users(
-    IdentityStoreId=id,
-    MaxResults=max_results,
-)
+def list_users(client, identity_store_id):
+    response = client.list_users(IdentityStoreId = identity_store_id, NextToken = token)
+    token = response.get('NextToken')
+
+    # While there is a next page, add to response dict
+    while token is not None:
+        next_response = client.list_users(IdentityStoreId = identity_store_id, NextToken = token)
+        # Get next page's token
+        token = next_response.get('NextToken')
+        # Add this page's users to the first response dict
+        response['Users'] += next_response['Users']
+    
+    return response
 
 #delete a user given an id. The id passed in is for the user you want to delete
 def delete_user(identity_store_id, user_id):
@@ -162,13 +170,13 @@ def delete_user(identity_store_id, user_id):
     )
 
 # list information of a user
-def describe_user(identity_store_id, user_id):
+def describe_user(client, identity_store_id, user_id):
     return client.describe_user(
     IdentityStoreId=identity_store_id,
     UserId=user_id
 )    
 
-def main():
+if __name__ == "__main__":
     # Create Identity Store client
     client = boto3.client('identitystore', region_name='us-west-1')
     store_id = 'd-916710dec9'
@@ -176,15 +184,16 @@ def main():
 
     # Clear all groups
     delete_all_groups(client, store_id)
+    create_user(client, store_id, "bbob", "billy", "bob")
+    response = list_users(client, store_id)
+    pprint(response)
     response = list_group(client, store_id)
     pp.pprint(response)
 
-    # Create random amount of groups
+    # # Create random amount of groups
     num_groups = 1000
     create_random_groups(client, id, num_groups)
     response = list_group(client, id)
     # List the groups
     pp.pprint(response)
-    return
 
-main()
