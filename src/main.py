@@ -52,7 +52,7 @@ def list_group(client, store_id):
 
     # While there is a next page, add to response dict
     while token is not None:
-        next_response = client.list_groups(IdentityStoreId = id, NextToken = token)
+        next_response = client.list_groups(IdentityStoreId = store_id, NextToken = token)
         # Get next page's token
         token = next_response.get('NextToken')
         # Add this page's groups to the first response dict
