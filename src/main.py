@@ -95,6 +95,19 @@ def create_random_groups(client, store_id, amount: int):
 
 #USER FUNCTIONS
 #create users must pass in client, identity_store_id, username, name
+        
+'''
+    Author: Ritika Brahmadesam
+    Args:
+        client (boto3 client): The authenticated boto3 client
+        store_id (string): The identity store id
+        username (int): username of user
+        first_name (string)
+        last_name (string)     
+    Returns:
+        None
+'''
+
 def create_user(client, identity_store_id, username, first_name, last_name,
                 middle_name=None, display_name=None, nickname=None, honorific_prefix=None,
                 honorific_suffix=None, profile_url=None, 
@@ -140,12 +153,19 @@ def create_user(client, identity_store_id, username, first_name, last_name,
         request_params['Timezone'] = timezone
 
     client.create_user(**request_params)
-    return "Successfully created user {}".format(username)
 
+'''
+    Author: Ritika Brahmadesam
+    Args:
+        client (boto3 client): The authenticated boto3 client
+        store_id (string): The identity store id
+    Returns:
+        dict: the json file as a dict
+'''
 
 #lists all users in identity store using BOTO3
 def list_users(client, identity_store_id):
-    response = client.list_users(IdentityStoreId = identity_store_id, NextToken = token)
+    response = client.list_users(IdentityStoreId = identity_store_id)
     token = response.get('NextToken')
 
     # While there is a next page, add to response dict
@@ -170,7 +190,7 @@ def delete_user(identity_store_id, user_id):
     )
 
 # list information of a user
-def describe_user(client, identity_store_id, user_id):
+def helper_describe_user(client, identity_store_id, user_id):
     return client.describe_user(
     IdentityStoreId=identity_store_id,
     UserId=user_id
@@ -181,19 +201,19 @@ if __name__ == "__main__":
     client = boto3.client('identitystore', region_name='us-west-1')
     store_id = 'd-916710dec9'
     pp = pprint.PrettyPrinter(indent=4)
-
+    print(client)
     # Clear all groups
-    delete_all_groups(client, store_id)
-    create_user(client, store_id, "bbob", "billy", "bob")
-    response = list_users(client, store_id)
-    pprint(response)
-    response = list_group(client, store_id)
-    pp.pprint(response)
+    # delete_all_groups(client, store_id)
+    # create_user(client, store_id, "bbob", "billy", "bob")
+    # response = list_users(client, store_id)
+    # pp.pprint(response)
+    # response = list_group(client, store_id)
+    # pp.pprint(response)
 
-    # # Create random amount of groups
-    num_groups = 1000
-    create_random_groups(client, id, num_groups)
-    response = list_group(client, id)
-    # List the groups
-    pp.pprint(response)
+    # # # Create random amount of groups
+    # num_groups = 1000
+    # create_random_groups(client, id, num_groups)
+    # response = list_group(client, id)
+    # # List the groups
+    # pp.pprint(response)
 
