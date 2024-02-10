@@ -54,7 +54,7 @@ def list_group(client, store_id):
 
     # While there is a next page, add to response dict
     while token is not None:
-        next_response = client.list_groups(IdentityStoreId = id, NextToken = token)
+        next_response = client.list_groups(IdentityStoreId = store_id, NextToken = token)
         # Get next page's token
         token = next_response.get('NextToken')
         # Add this page's groups to the first response dict
@@ -216,4 +216,14 @@ if __name__ == "__main__":
     # response = list_group(client, id)
     # # List the groups
     # pp.pprint(response)
+    delete_all_groups(client, store_id)
+    response = list_group(client, store_id)
+    pp.pprint(response)
+
+    # Create random amount of groups
+    num_groups = 400
+    create_random_groups(client, store_id, num_groups)
+    response = list_group(client, store_id)
+    # List the groups
+    pp.pprint(response)
 
