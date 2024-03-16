@@ -1,9 +1,9 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   identity-store-lambda
 
-  Sample SAM Template for identity-store-lambda
+  SAM Template for identity-store-API
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -12,17 +12,215 @@ Globals:
     MemorySize: 128
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  Groups:
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
-      Runtime: python3.9
+      CodeUri: .
+      Description: ""
+      MemorySize: 128
+      Timeout: 3
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
       Architectures:
         - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - identitystore:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:us-west-1:416469482962:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:us-west-1:416469482962:log-group:/aws/lambda/CreateGroup:*
+      SnapStart:
+        ApplyOn: None
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        Api1:
+          Type: Api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /MyResource
+            Method: ANY
+        Api2:
+          Type: Api
+          Properties:
+            Path: /MyResource
+            Method: ANY
+        Api3:
+          Type: Api
+          Properties:
+            Path: /groups
+            Method: GET
+        Api4:
+          Type: Api
+          Properties:
+            Path: /groups
+            Method: POST
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+  Group:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ""
+      MemorySize: 128
+      Timeout: 3
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - identitystore:*
+              Resource: "*"
+      SnapStart:
+        ApplyOn: None
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /groups/{groupId}
+            Method: GET
+        Api2:
+          Type: Api
+          Properties:
+            Path: /groups/{groupId}
+            Method: DELETE
+        Api3:
+          Type: Api
+          Properties:
+            Path: /groups/{groupId}
+            Method: PATCH
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+  MembershipGroups:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ""
+      MemorySize: 128
+      Timeout: 3
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - identitystore:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:us-west-1:416469482962:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:us-west-1:416469482962:log-group:/aws/lambda/CreateGroup:*
+      SnapStart:
+        ApplyOn: None
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /memberships/groups/{groupId}
+            Method: GET
+        Api2:
+          Type: Api
+          Properties:
+            Path: /memberships/groups/{groupId}
+            Method: DELETE
+        Api3:
+          Type: Api
+          Properties:
+            Path: /memberships/groups/{groupId}
+            Method: POST
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+  Memberships:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ""
+      MemorySize: 128
+      Timeout: 3
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Sid: VisualEditor0
+              Effect: Allow
+              Action:
+                - identitystore:*
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:us-west-1:416469482962:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:us-west-1:416469482962:log-group:/aws/lambda/CreateGroup:*
+      SnapStart:
+        ApplyOn: None
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /memberships/{membershipId}
+            Method: GET
+        Api2:
+          Type: Api
+          Properties:
+            Path: /memberships/{membershipId}
+            Method: DELETE
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
