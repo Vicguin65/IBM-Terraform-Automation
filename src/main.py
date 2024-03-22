@@ -60,6 +60,8 @@ def list_group(client, store_id):
         # Add this page's groups to the first response dict
         response['Groups'] += next_response['Groups']
     
+    # Remove NextToken
+    response.pop('NextToken', None)
     return response
 
 # Helper Functions
