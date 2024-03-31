@@ -50,16 +50,6 @@ Resources:
       SnapStart:
         ApplyOn: None
       Events:
-        Api1:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api2:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
         Api3:
           Type: Api
           Properties:
