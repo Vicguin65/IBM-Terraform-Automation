@@ -73,7 +73,7 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
                     'statusCode': 400,
-                    'body': f"store id is invalid"
+                    'body': f"store id {store_id} is invalid"
                 }
     
     response = {}
