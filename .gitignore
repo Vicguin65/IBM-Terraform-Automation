@@ -1,2 +1,5 @@
 venv
 .env
+identity-store-lambda/.aws-sam/*
+identity-store-lambda/samconfig.toml
+identity-store-lambda/samconfig.toml

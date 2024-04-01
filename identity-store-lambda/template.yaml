@@ -15,7 +15,7 @@ Resources:
   Groups:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./groups
       Description: ""
       MemorySize: 128
       Timeout: 3
@@ -66,7 +66,7 @@ Resources:
   Group:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./group
       Description: ""
       MemorySize: 128
       Timeout: 3
@@ -111,7 +111,7 @@ Resources:
   MembershipGroups:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./membership_groups
       Description: ""
       MemorySize: 128
       Timeout: 3
@@ -163,11 +163,11 @@ Resources:
             Method: POST
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-        
+
   Memberships:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
+      CodeUri: ./memberships
       Description: ""
       MemorySize: 128
       Timeout: 3
@@ -214,12 +214,12 @@ Resources:
             Method: DELETE
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-  
+
   User:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
-      Description: ''
+      CodeUri: ./user
+      Description: ""
       MemorySize: 128
       Timeout: 3
       Handler: lambda_function.lambda_handler
@@ -238,7 +238,7 @@ Resources:
               Effect: Allow
               Action:
                 - identitystore:*
-              Resource: '*'
+              Resource: "*"
       SnapStart:
         ApplyOn: None
       Events:
@@ -259,16 +259,16 @@ Resources:
             Method: PATCH
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-  
+
   Users:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
-      Description: ''
+      CodeUri: ./users
+      Description: ""
       MemorySize: 128
       Timeout: 3
       Handler: lambda_function.lambda_handler
-      Runtime: python3.9
+      Runtime: python3.12
       Architectures:
         - x86_64
       EphemeralStorage:
@@ -283,30 +283,19 @@ Resources:
               Effect: Allow
               Action:
                 - identitystore:*
-              Resource: '*'
+              Resource: "*"
       SnapStart:
         ApplyOn: None
       Events:
         Api1:
           Type: Api
           Properties:
-            Path: /MyResource
-            Method: ANY
-        Api2:
-          Type: Api
-          Properties:
-            Path: /MyResource
-            Method: ANY
-        Api3:
-          Type: Api
-          Properties:
             Path: /users
             Method: GET
-        Api4:
+        Api2:
           Type: Api
           Properties:
             Path: /users
             Method: POST
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-      
