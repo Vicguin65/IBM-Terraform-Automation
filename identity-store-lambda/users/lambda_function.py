@@ -25,13 +25,13 @@ def create_user(client, identity_store_id, username, first_name, last_name,
                 locale=None, timezone=None):
     #create a dictionary for the paramenters
     request_params = {
-    'IdentityStoreId': identity_store_id,
-    'UserName': username,
-    'Name': {
-        'Formatted': 'string',
-        'FamilyName': last_name,
-        'GivenName': first_name,
-    },
+        'IdentityStoreId': identity_store_id,
+        'UserName': username,
+        'Name': {
+            'Formatted': 'string',
+            'FamilyName': last_name,
+            'GivenName': first_name,
+        },
     }
 
     # IF ADDITIONAL PARAMETERS ARE SPECIFIED, ADD THEM AS WELL
@@ -61,12 +61,10 @@ def create_user(client, identity_store_id, username, first_name, last_name,
     if timezone:
         request_params['Timezone'] = timezone
     
-    
-        
     try:
         client.create_user(**request_params)
     except Exception as e: 
-        #duplicate usernaes
+        #duplicate usernames
         if "Duplicate UserName" in str(e):
             return {
                     'statusCode': 400,
