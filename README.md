@@ -25,7 +25,9 @@ pip install -r requirements.txt
 ## Prerequisites
 
 Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
 Setup [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
+
 Install [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
 
 ## Setup
