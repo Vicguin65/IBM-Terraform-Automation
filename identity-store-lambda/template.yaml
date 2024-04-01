@@ -163,7 +163,7 @@ Resources:
             Method: POST
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-
+        
   Memberships:
     Type: AWS::Serverless::Function
     Properties:
@@ -214,17 +214,7 @@ Resources:
             Method: DELETE
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-
-# This AWS SAM template has been generated from your function's configuration. If
-# your function has one or more triggers, note that the AWS resources associated
-# with these triggers aren't fully specified in this template and include
-# placeholder values. Open this template in AWS Application Composer or your
-# favorite IDE and modify it to specify a serverless application with other AWS
-# resources.
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: An AWS Serverless Application Model template describing your function.
-Resources:
+  
   User:
     Type: AWS::Serverless::Function
     Properties:
@@ -269,17 +259,7 @@ Resources:
             Method: PATCH
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
-
-# This AWS SAM template has been generated from your function's configuration. If
-# your function has one or more triggers, note that the AWS resources associated
-# with these triggers aren't fully specified in this template and include
-# placeholder values. Open this template in AWS Application Composer or your
-# favorite IDE and modify it to specify a serverless application with other AWS
-# resources.
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: An AWS Serverless Application Model template describing your function.
-Resources:
+  
   Users:
     Type: AWS::Serverless::Function
     Properties:
@@ -329,3 +309,4 @@ Resources:
             Method: POST
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
+      
