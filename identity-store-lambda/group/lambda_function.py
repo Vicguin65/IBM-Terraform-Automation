@@ -1,9 +1,9 @@
 import json
 import boto3 
+import botocore
 
 def lambda_handler(event, context):
     
-    client = boto3.client('identitystore', region_name='us-west-1')
     request_type = event['httpMethod']
     group_id = event['pathParameters']['groupId']
     
@@ -22,15 +22,37 @@ def lambda_handler(event, context):
             'body': 'Bad request. No storeId provided.'
         }
     
-    #TODO Find a better way to implement store_id check.
-    try: 
-        client.list_groups(IdentityStoreId=store_id)
-    except:
+    # Check region name parameter
+    region = event['queryStringParameters'].get('regionName')
+    if region is None or not region:
         return {
             'statusCode': 400,
-            'body': f'Bad request. Invalid storeId {store_id}.'
+            'body': 'Bad request. No regionName provided.'
         }
-    
+
+    # Create client
+    client = boto3.client('identitystore', region_name=region)
+
+    # This is the current best way to check if store_id and region_name are valid
+    try: 
+        client.list_groups(IdentityStoreId=store_id)
+    except botocore.exceptions.EndpointConnectionError as e:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+    except Exception as e:
+        if 'ValidationException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. Invalid storeId {store_id}.'
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': 'Bad request.'
+            }
+
     # Check if valid group
     try:
         response = client.describe_group(
