@@ -197,6 +197,10 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': f'Request type {request_type} not valid for users'
         }
+    
+    # Transform to Camel Case
+    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    
     return {
         'statusCode': 200,
         'body': json.dumps(response)

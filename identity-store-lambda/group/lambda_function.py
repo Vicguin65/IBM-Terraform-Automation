@@ -127,6 +127,8 @@ def lambda_handler(event, context):
                     'body': 'Bad request.'
                 }
         
+        # Transform to Camel Case
+        response = {key[0].lower() + key[1:]: value for key, value in response.items()}
         return {
             'statusCode': 201,
             'body': json.dumps(response),
@@ -137,6 +139,8 @@ def lambda_handler(event, context):
             'body': f'Request type {request_type} not valid for groups'
         }
     
+    # Transform to Camel Case
+    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
     return {
         'statusCode': 200,
         'body': json.dumps(response),
