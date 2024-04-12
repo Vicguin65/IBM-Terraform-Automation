@@ -96,22 +96,17 @@ def lambda_handler(event, context):
         }
             
     elif request_type == 'GET':
-        # List the first page of groups
-        response = client.list_groups(IdentityStoreId = store_id)
-        # Get the next page's token 
-        token = response.get('NextToken')
-    
-        # While there is a next page, add to response dict
-        while token is not None:
-            next_response = client.list_groups(IdentityStoreId = store_id, NextToken = token)
-            # Get next page's token
-            token = next_response.get('NextToken')
-            # Add this page's groups to the first response dict
-            response['Groups'] += next_response['Groups']
-        
-        # Remove NextToken
-        response.pop('NextToken', None)
-    
+        # Create paginator
+        paginator = client.get_paginator('list_groups')
+
+        # Create page iterator
+        page_iterator = paginator.paginate(IdentityStoreId=store_id)
+
+        # Add each page to response
+        response['Groups'] = []
+        for page in page_iterator:
+            response['Groups'] += page['Groups']
+            
     else:
         return {
             'statusCode': 400,

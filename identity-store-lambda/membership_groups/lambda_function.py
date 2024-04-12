@@ -66,29 +66,16 @@ def lambda_handler(event, context):
         
     response = {}
     if request_type == 'GET':
+        # Create paginator
+        paginator = client.get_paginator('list_group_memberships')
 
-        # List the first page of memberships
-        response = client.list_group_memberships(
-            IdentityStoreId=store_id,
-            GroupId=group_id
-        )
-        # Get the next page's token 
-        token = response.get('NextToken')
-    
-        # While there is a next page, add to response dict
-        while token is not None:
-            next_response = client.list_group_memberships(
-                IdentityStoreId = store_id,
-                GroupId = group_id,
-                NextToken = token
-            )
-            # Get next page's token
-            token = next_response.get('NextToken')
-            # Add this page's groups to the first response dict
-            response['Groups'] += next_response['Groups']
-        
-        # Remove NextToken
-        response.pop('NextToken', None)
+        # Create page iterator
+        page_iterator = paginator.paginate(IdentityStoreId=store_id, GroupId=group_id)
+
+        # Add each page to response
+        response['GroupMemberships'] = []
+        for page in page_iterator:
+            response['GroupMemberships'] += page['GroupMemberships']
         
         
     elif request_type == 'DELETE':
