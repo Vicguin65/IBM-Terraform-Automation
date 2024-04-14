@@ -1,6 +1,6 @@
 import json
 import boto3
-import botocore
+from regions import regions
 
 def list_users(client, identity_store_id):
     response = client.list_users(IdentityStoreId = identity_store_id)
@@ -160,22 +160,27 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': 'Bad request. No regionName provided.'
         }
-
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+        
     client = boto3.client('identitystore', region_name=region)
 
     #Check if Store id provided is valid
     try: 
         client.list_users(IdentityStoreId=identity_store_id)
-    except botocore.exceptions.EndpointConnectionError as e:
-        return {
-            'statusCode': 400,
-            'body': f'Bad request. Invalid regionName {region}.'
-        }
     except Exception as e:
         if 'ValidationException' in str(type(e)):
             return {
                 'statusCode': 400,
                 'body': f'Bad request. Invalid storeId {identity_store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
             }
         else:
             return {

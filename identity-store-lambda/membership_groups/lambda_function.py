@@ -1,9 +1,8 @@
 import json
 import boto3 
-import botocore
+from regions import regions
 
 def lambda_handler(event, context):
-    
     
     request_type = event['httpMethod']
     group_id = event['pathParameters']['groupId']
@@ -30,21 +29,26 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': 'Bad request. No regionName provided.'
         }
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
 
     client = boto3.client('identitystore', region_name=region)
     # This is the current best way to check if store_id and region_name are valid
     try: 
         client.list_groups(IdentityStoreId=store_id)
-    except botocore.exceptions.EndpointConnectionError as e:
-        return {
-            'statusCode': 400,
-            'body': f'Bad request. Invalid regionName {region}.'
-        }
     except Exception as e:
         if 'ValidationException' in str(type(e)):
             return {
                 'statusCode': 400,
                 'body': f'Bad request. Invalid storeId {store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
             }
         else:
             return {
@@ -75,7 +79,10 @@ def lambda_handler(event, context):
         # Add each page to response
         response['GroupMemberships'] = []
         for page in page_iterator:
-            response['GroupMemberships'] += page['GroupMemberships']
+            for membership in page['GroupMemberships']:
+                membership = {key[0].lower() + key[1:]: value for key, value in membership.items()}
+                membership['memberId'] = {key[0].lower() + key[1:]: value for key, value in membership['memberId'].items()}
+                response['GroupMemberships'].append(membership)
         
         
     elif request_type == 'DELETE':
