@@ -1,5 +1,6 @@
 import json
 import boto3 
+from helper import regions, t_dict
 
 def update_user(client, identity_store_id, user_id, new_username, new_path=None):
     try:
@@ -48,7 +49,6 @@ def describe_user(client, identity_store_id, user_id):
 
 
 def lambda_handler(event, context):
-    client = boto3.client('identitystore', region_name='us-west-1')
     request_type = event['httpMethod']
     user_id = event['pathParameters']['userId']  # Fixed variable name
 
@@ -67,14 +67,39 @@ def lambda_handler(event, context):
             'body': 'Bad request. No storeId provided.'
         }
     
+    # Check region name parameter
+    region = event['queryStringParameters'].get('regionName')
+    if region is None or not region:
+        return {
+            'statusCode': 400,
+            'body': 'Bad request. No regionName provided.'
+        }
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+
+    client = boto3.client('identitystore', region_name=region)
     #check if the store id can call a boto3 function
     try: 
         client.list_users(IdentityStoreId=store_id)
     except Exception as e:
-        return {
-                    'statusCode': 400,
-                    'body': f"store id {store_id} is invalid"
-                }
+        if 'ValidationException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. Invalid storeId {store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': 'Bad request.'
+            }
     
     response = {}
     
@@ -86,7 +111,9 @@ def lambda_handler(event, context):
         pass
     
 
-    # TODO implement
+    # Transform to Camel Case
+    response = t_dict(response)
+    
     return {
         'statusCode': 200,
         'body': json.dumps(response)

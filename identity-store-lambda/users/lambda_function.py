@@ -1,18 +1,22 @@
 import json
 import boto3
-
+from helper import regions, t_dict
 
 def list_users(client, identity_store_id):
     response = client.list_users(IdentityStoreId = identity_store_id)
     token = response.get('NextToken')
 
-    # While there is a next page, add to response dict
-    while token is not None:
-        next_response = client.list_users(IdentityStoreId = identity_store_id, NextToken = token)
-        # Get next page's token
-        token = next_response.get('NextToken')
-        # Add this page's users to the first response dict
-        response['Users'] += next_response['Users']
+    # Create paginator
+    paginator = client.get_paginator('list_users')
+
+    # Create page iterator
+    page_iterator = paginator.paginate(IdentityStoreId=identity_store_id)
+
+    # Add each page to response
+    response['Users'] = []
+    for page in page_iterator:
+        for user in page['Users']:
+            response['Users'].append(user)
     
     return response
 
@@ -134,7 +138,6 @@ def post_user(event, client, identity_store_id):
     
 def lambda_handler(event, context):
     
-    client = boto3.client('identitystore', region_name='us-west-1')
     request_type = event['httpMethod']
     
 
@@ -154,14 +157,40 @@ def lambda_handler(event, context):
             'body': 'Bad request. No storeId provided.'
         }
 
+    # Check region name parameter
+    region = event['queryStringParameters'].get('regionName')
+    if region is None or not region:
+        return {
+            'statusCode': 400,
+            'body': 'Bad request. No regionName provided.'
+        }
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+        
+    client = boto3.client('identitystore', region_name=region)
+
     #Check if Store id provided is valid
     try: 
         client.list_users(IdentityStoreId=identity_store_id)
     except Exception as e:
-        return {
-                    'statusCode': 400,
-                    'body': 'Bad request. Invalid storeId.'
-                }
+        if 'ValidationException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. Invalid storeId {identity_store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': 'Bad request.'
+            }
     
     
         
@@ -177,6 +206,10 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': f'Request type {request_type} not valid for users'
         }
+    
+    # Transform to Camel Case
+    response = t_dict(response)
+    
     return {
         'statusCode': 200,
         'body': json.dumps(response)

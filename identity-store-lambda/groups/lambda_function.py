@@ -1,9 +1,9 @@
 import json
-import boto3 
+import boto3
+from helper import regions, t_dict
 
 def lambda_handler(event, context):
     
-    client = boto3.client('identitystore', region_name='us-west-1')
     request_type = event['httpMethod']
     
     # Check queryStringParameters Exists
@@ -21,14 +21,40 @@ def lambda_handler(event, context):
             'body': 'Bad request. No storeId provided.'
         }
     
-    #TODO Find a better way to implement store_id check.
+    # Check region name parameter
+    region = event['queryStringParameters'].get('regionName')
+    if region is None or not region:
+        return {
+            'statusCode': 400,
+            'body': 'Bad request. No regionName provided.'
+        }
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+        
+    client = boto3.client('identitystore', region_name=region)
+
+    # This is the current best way to check if store_id and region_name are valid
     try: 
         client.list_groups(IdentityStoreId=store_id)
-    except:
-        return {
-                    'statusCode': 400,
-                    'body': 'Bad request. Invalid storeId.'
-                }
+    except Exception as e:
+        if 'ValidationException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. Invalid storeId {store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': 'Bad request.'
+            }
     
     response = {}
     if request_type == 'POST':
@@ -50,7 +76,7 @@ def lambda_handler(event, context):
             }
             
         try:
-            response = client.create_group(IdentityStoreId = store_id, DisplayName = group_name, Description = description)
+            response = client.create_group(IdentityStoreId=store_id, DisplayName=group_name, Description=description)
         except Exception as e:
             # Duplicate Groups Error
             if 'Conflict' in str(e):
@@ -65,36 +91,35 @@ def lambda_handler(event, context):
                     'statusCode': 400,
                     'body': 'Bad request.'
                 }
-                
+        
+        # Transform to Camel Case
+        response = t_dict(response)
         return {
             'statusCode': 201,
             'body': json.dumps(response)
         }
             
     elif request_type == 'GET':
-        # List the first page of groups
-        response = client.list_groups(IdentityStoreId = store_id)
-        # Get the next page's token 
-        token = response.get('NextToken')
-    
-        # While there is a next page, add to response dict
-        while token is not None:
-            next_response = client.list_groups(IdentityStoreId = store_id, NextToken = token)
-            # Get next page's token
-            token = next_response.get('NextToken')
-            # Add this page's groups to the first response dict
-            response['Groups'] += next_response['Groups']
-        
-        # Remove NextToken
-        response.pop('NextToken', None)
-    
+        # Create paginator
+        paginator = client.get_paginator('list_groups')
+
+        # Create page iterator
+        page_iterator = paginator.paginate(IdentityStoreId=store_id)
+
+        # Add each page to response
+        response['Groups'] = []
+        for page in page_iterator:
+            for group in page['Groups']:
+                response['Groups'].append(group)  
+            
     else:
         return {
             'statusCode': 400,
             'body': f'Request type {request_type} not valid for groups'
         }
     
-    
+    # Transform to Camel Case
+    response = t_dict(response)
     return {
         'statusCode': 200,
         'body': json.dumps(response),

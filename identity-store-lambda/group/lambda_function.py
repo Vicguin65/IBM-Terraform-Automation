@@ -1,9 +1,9 @@
 import json
 import boto3 
+from helper import regions, t_dict
 
 def lambda_handler(event, context):
     
-    client = boto3.client('identitystore', region_name='us-west-1')
     request_type = event['httpMethod']
     group_id = event['pathParameters']['groupId']
     
@@ -22,15 +22,42 @@ def lambda_handler(event, context):
             'body': 'Bad request. No storeId provided.'
         }
     
-    #TODO Find a better way to implement store_id check.
-    try: 
-        client.list_groups(IdentityStoreId=store_id)
-    except:
+    # Check region name parameter
+    region = event['queryStringParameters'].get('regionName')
+    if region is None or not region:
         return {
             'statusCode': 400,
-            'body': f'Bad request. Invalid storeId {store_id}.'
+            'body': 'Bad request. No regionName provided.'
         }
-    
+    if region not in regions:
+        return {
+            'statusCode': 400,
+            'body': f'Bad request. Invalid regionName {region}.'
+        }
+
+    # Create client
+    client = boto3.client('identitystore', region_name=region)
+
+    # This is the current best way to check if store_id and region_name are valid
+    try: 
+        client.list_groups(IdentityStoreId=store_id)
+    except Exception as e:
+        if 'ValidationException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. Invalid storeId {store_id}.'
+            }
+        elif 'ResourceNotFoundException' in str(type(e)):
+            return {
+                'statusCode': 400,
+                'body': f'Bad request. No IdentityStore in region {region}.'
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': 'Bad request.'
+            }
+
     # Check if valid group
     try:
         response = client.describe_group(
@@ -105,6 +132,8 @@ def lambda_handler(event, context):
                     'body': 'Bad request.'
                 }
         
+        # Transform to Camel Case
+        response = t_dict(response)
         return {
             'statusCode': 201,
             'body': json.dumps(response),
@@ -115,6 +144,8 @@ def lambda_handler(event, context):
             'body': f'Request type {request_type} not valid for groups'
         }
     
+    # Transform to Camel Case
+    response = t_dict(response)
     return {
         'statusCode': 200,
         'body': json.dumps(response),
