@@ -1,9 +1,8 @@
 import json
 import boto3
-from regions import regions
+from helper import regions, t_dict
 
 def lambda_handler(event, context):
-    
     
     request_type = event['httpMethod']
     
@@ -94,7 +93,7 @@ def lambda_handler(event, context):
                 }
         
         # Transform to Camel Case
-        response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+        response = t_dict(response)
         return {
             'statusCode': 201,
             'body': json.dumps(response)
@@ -111,7 +110,6 @@ def lambda_handler(event, context):
         response['Groups'] = []
         for page in page_iterator:
             for group in page['Groups']:
-                group = {key[0].lower() + key[1:]: value for key, value in group.items()}
                 response['Groups'].append(group)  
             
     else:
@@ -121,7 +119,7 @@ def lambda_handler(event, context):
         }
     
     # Transform to Camel Case
-    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    response = t_dict(response)
     return {
         'statusCode': 200,
         'body': json.dumps(response),

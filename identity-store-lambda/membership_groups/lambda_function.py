@@ -1,6 +1,6 @@
 import json
 import boto3 
-from regions import regions
+from helper import regions, t_dict
 
 def lambda_handler(event, context):
     
@@ -80,8 +80,6 @@ def lambda_handler(event, context):
         response['GroupMemberships'] = []
         for page in page_iterator:
             for membership in page['GroupMemberships']:
-                membership = {key[0].lower() + key[1:]: value for key, value in membership.items()}
-                membership['memberId'] = {key[0].lower() + key[1:]: value for key, value in membership['memberId'].items()}
                 response['GroupMemberships'].append(membership)
         
         
@@ -174,7 +172,7 @@ def lambda_handler(event, context):
         }
     
     # Transform to Camel Case
-    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    response = t_dict(response)
     return {
         'statusCode': 200,
         'body': json.dumps(response),

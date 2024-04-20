@@ -1,6 +1,6 @@
 import json
 import boto3 
-from regions import regions
+from helper import regions, t_dict
 
 def update_user(client, identity_store_id, user_id, new_username, new_path=None):
     try:
@@ -112,7 +112,7 @@ def lambda_handler(event, context):
     
 
     # Transform to Camel Case
-    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    response = t_dict(response)
     
     return {
         'statusCode': 200,

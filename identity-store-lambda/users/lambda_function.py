@@ -1,18 +1,22 @@
 import json
 import boto3
-from regions import regions
+from helper import regions, t_dict
 
 def list_users(client, identity_store_id):
     response = client.list_users(IdentityStoreId = identity_store_id)
     token = response.get('NextToken')
 
-    # While there is a next page, add to response dict
-    while token is not None:
-        next_response = client.list_users(IdentityStoreId = identity_store_id, NextToken = token)
-        # Get next page's token
-        token = next_response.get('NextToken')
-        # Add this page's users to the first response dict
-        response['Users'] += next_response['Users']
+    # Create paginator
+    paginator = client.get_paginator('list_users')
+
+    # Create page iterator
+    page_iterator = paginator.paginate(IdentityStoreId=identity_store_id)
+
+    # Add each page to response
+    response['Users'] = []
+    for page in page_iterator:
+        for user in page['Users']:
+            response['Users'].append(user)
     
     return response
 
@@ -204,7 +208,7 @@ def lambda_handler(event, context):
         }
     
     # Transform to Camel Case
-    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    response = t_dict(response)
     
     return {
         'statusCode': 200,

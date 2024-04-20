@@ -1,6 +1,6 @@
 import json
 import boto3 
-from regions import regions
+from helper import regions, t_dict
 
 def lambda_handler(event, context):
     
@@ -72,8 +72,7 @@ def lambda_handler(event, context):
         }
     
     if request_type == 'GET':
-        # turn this dict into camelCase
-        response['MemberId'] = {key[0].lower() + key[1:]: value for key, value in response['MemberId'].items()}
+        pass
         
         
     elif request_type == 'DELETE':
@@ -95,7 +94,7 @@ def lambda_handler(event, context):
         }
     
     # Transform to Camel Case
-    response = {key[0].lower() + key[1:]: value for key, value in response.items()}
+    response = t_dict(response)
     return {
         'statusCode': 200,
         'body': json.dumps(response),
