@@ -1,10 +1,10 @@
 import json
 import boto3
 from helper import regions, t_dict
+import requests
 
-def list_users(client, identity_store_id):
+def list_users(client, identity_store_id, bearer_token="", region=""):
     response = client.list_users(IdentityStoreId = identity_store_id)
-    token = response.get('NextToken')
 
     # Create paginator
     paginator = client.get_paginator('list_users')
@@ -14,10 +14,40 @@ def list_users(client, identity_store_id):
 
     # Add each page to response
     response['Users'] = []
+    s3client = boto3.client('s3', 
+                            region_name=region, 
+                        )
     for page in page_iterator:
         for user in page['Users']:
+            # IMPORTANT:
+            # REPLACE THIS URL WITH YOUR SCIM ENDPOINT
+            url = "https://scim.us-west-1.amazonaws.com/DkS850d4238-1d4d-4f69-b6d7-322c248bb872/scim/v2/Users/"
+            headers = {
+                'Authorization': 'Bearer ' + bearer_token
+            }
+            
+            scimResponse = requests.get(url + user['UserId'], headers=headers)
+
+            if scimResponse.status_code == 200:
+                data = scimResponse.json()
+                user['active'] = data['active']
+            else:
+                print("Error:", scimResponse.status_code)
+            
             response['Users'].append(user)
-    
+            
+            userJson = json.dumps(user)
+            userId = user['UserId']
+            # Add json to s3 bucket
+            try:
+                s3client.put_object(
+                    Bucket='identity-store-bucket', 
+                    Key=f'users/{userId}.json',
+                    Body=userJson
+                )
+            except Exception as e:
+                print(str(e))
+                
     return response
 
 
@@ -197,7 +227,11 @@ def lambda_handler(event, context):
     response = {}
     #Return provided request
     if(request_type == "GET"):
-        response = list_users(client, identity_store_id)
+        bearer_token = ""
+        if type(event.get('headers')) == dict:
+            bearer_token = event.get('headers').get('Bearer', "")
+            
+        response = list_users(client, identity_store_id, bearer_token, region)
             
     elif(request_type == "POST"):
         response = post_user(event, client, identity_store_id)
