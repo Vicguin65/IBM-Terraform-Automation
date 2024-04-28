@@ -21,6 +21,7 @@ def list_users(client, identity_store_id, bearer_token="", region=""):
         for user in page['Users']:
             # IMPORTANT:
             # REPLACE THIS URL WITH YOUR SCIM ENDPOINT
+            # ALSO, BEARER TOKEN MUST BE INCLUDED AS BEARER IN HEADER
             url = "https://scim.us-west-1.amazonaws.com/DkS850d4238-1d4d-4f69-b6d7-322c248bb872/scim/v2/Users/"
             headers = {
                 'Authorization': 'Bearer ' + bearer_token
@@ -36,17 +37,18 @@ def list_users(client, identity_store_id, bearer_token="", region=""):
             
             response['Users'].append(user)
             
-            userJson = json.dumps(user)
-            userId = user['UserId']
-            # Add json to s3 bucket
-            try:
-                s3client.put_object(
-                    Bucket='identity-store-bucket', 
-                    Key=f'users/{userId}.json',
-                    Body=userJson
-                )
-            except Exception as e:
-                print(str(e))
+    userJson = json.dumps(response)
+            
+    #
+    # Add json to s3 bucket
+    try:
+        s3client.put_object(
+            Bucket='identity-store-bucket', 
+            Key=f'users/allUsers.json',
+            Body=userJson
+        )
+    except Exception as e:
+        print(str(e))
                 
     return response
 
