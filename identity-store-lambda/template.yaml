@@ -290,7 +290,7 @@ Resources:
       CodeUri: ./users
       Description: ""
       MemorySize: 128
-      Timeout: 3
+      Timeout: 135
       Handler: lambda_function.lambda_handler
       Runtime: python3.9
       Architectures:
@@ -302,6 +302,9 @@ Resources:
         MaximumRetryAttempts: 2
       PackageType: Zip
       Policies:
+        - S3FullAccessPolicy:
+            BucketName: identity-store-bucket
+
         - Statement:
             - Sid: VisualEditor0
               Effect: Allow
