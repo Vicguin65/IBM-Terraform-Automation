@@ -37,6 +37,14 @@ resource "aws_security_group" "allow_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Allow SSH traffic"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
@@ -111,6 +119,10 @@ resource "aws_eip" "nat" {
   domain = "vpc"
 
   depends_on = [aws_internet_gateway.internet_gateway]
+
+  tags = {
+    Name = "terraform created eip"
+  }
 }
 
 resource "aws_nat_gateway" "nat" {
@@ -153,36 +165,18 @@ resource "aws_route_table_association" "private_two" {
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_security_group" "instance_sg" {
-  name        = "instance-sg"
-  description = "Allow traffic from the load balancer"
-  vpc_id      = aws_vpc.vpc_main.id
-
-  ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.allow_http.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "instance-sg"
-  }
-}
-
 resource "aws_lb" "web_alb" {
   name               = "web-alb"
-  internal           = true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.instance_sg.id]
-  subnets            = [aws_subnet.subnet_public.id, aws_subnet.subnet_public_two.id]
+  security_groups    = [aws_security_group.allow_http.id]
+
+  subnet_mapping {
+    subnet_id = aws_subnet.subnet_public.id
+  }
+
+  subnet_mapping {
+    subnet_id = aws_subnet.subnet_public_two.id
+  }
 
   tags = {
     Name = "web-alb"
