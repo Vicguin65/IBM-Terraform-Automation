@@ -1,14 +1,14 @@
-provider "aws"{
-    access_key = ""
-    secret_key = ""
-    region = "us-west-2"
+provider "aws" {
+  access_key = ""
+  secret_key = ""
+  region     = "us-west-2"
 }
 
 resource "aws_vpc" "vpc_main" {
 
   cidr_block = "10.0.0.0/16"
-  tags={
-    Name="terraform created VPC"
+  tags = {
+    Name = "terraform created VPC"
   }
 }
 
@@ -47,58 +47,68 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_subnet" "subnet_public" {
-  vpc_id     = aws_vpc.vpc_main.id
-  cidr_block = "10.0.3.0/24"
-  availability_zone = "us-west-2c"
+  vpc_id                  = aws_vpc.vpc_main.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = "us-west-2a"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "subnet_public_two" {
+  vpc_id                  = aws_vpc.vpc_main.id
+  cidr_block              = "10.0.4.0/24"
+  availability_zone       = "us-west-2b"
+  map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "subnet_one" {
-  vpc_id     = aws_vpc.vpc_main.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "us-west-2a"  
+  vpc_id            = aws_vpc.vpc_main.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-west-2a"
 }
 
 resource "aws_subnet" "subnet_two" {
-  vpc_id     = aws_vpc.vpc_main.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id            = aws_vpc.vpc_main.id
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "us-west-2b"
 }
 
-resource "aws_instance" "hello_terraform_instance"{
-    ami = "ami-03c983f9003cb9cd1"
-    instance_type = "t2.micro"
-    user_data = "${file("user-data-apache.sh")}"
-    
-    vpc_security_group_ids = [aws_security_group.allow_http.id]
-    subnet_id = aws_subnet.subnet_public.id
+resource "aws_instance" "hello_terraform_instance" {
+  ami           = "ami-03c983f9003cb9cd1"
+  instance_type = "t2.micro"
+  user_data     = file("user-data-apache.sh")
+
+  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  subnet_id              = aws_subnet.subnet_public.id
 }
 
-resource "aws_instance" "instance_one"{
-    ami = "ami-03c983f9003cb9cd1"
-    instance_type = "t2.micro"
-    
-    vpc_security_group_ids = [aws_security_group.allow_http.id]
-    subnet_id = aws_subnet.subnet_one.id
+resource "aws_instance" "instance_one" {
+  ami           = "ami-03c983f9003cb9cd1"
+  instance_type = "t2.micro"
+  user_data     = file("user-data-apache.sh")
 
-    tags = {
-      Name = "private one"
-    }
+  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  subnet_id              = aws_subnet.subnet_one.id
+
+  tags = {
+    Name = "private one"
+  }
 }
 
-resource "aws_instance" "instance_two"{
-    ami = "ami-03c983f9003cb9cd1"
-    instance_type = "t2.micro"
-    
-    vpc_security_group_ids = [aws_security_group.allow_http.id]
-    subnet_id = aws_subnet.subnet_two.id
-    
-    tags = {
-      Name = "private two"
-    }
+resource "aws_instance" "instance_two" {
+  ami           = "ami-03c983f9003cb9cd1"
+  instance_type = "t2.micro"
+  user_data     = file("user-data-apache.sh")
+
+  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  subnet_id              = aws_subnet.subnet_two.id
+
+  tags = {
+    Name = "private two"
+  }
 }
 
 resource "aws_eip" "nat" {
-  domain   = "vpc"
+  domain = "vpc"
 
   depends_on = [aws_internet_gateway.internet_gateway]
 }
@@ -123,7 +133,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc_main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 }
@@ -143,3 +153,83 @@ resource "aws_route_table_association" "private_two" {
   route_table_id = aws_route_table.private.id
 }
 
+resource "aws_security_group" "instance_sg" {
+  name        = "instance-sg"
+  description = "Allow traffic from the load balancer"
+  vpc_id      = aws_vpc.vpc_main.id
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.allow_http.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "instance-sg"
+  }
+}
+
+resource "aws_lb" "web_alb" {
+  name               = "web-alb"
+  internal           = true
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.instance_sg.id]
+  subnets            = [aws_subnet.subnet_public.id, aws_subnet.subnet_public_two.id]
+
+  tags = {
+    Name = "web-alb"
+  }
+}
+
+
+
+resource "aws_lb_target_group" "web_tg" {
+  name     = "web-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.vpc_main.id
+
+  health_check {
+    path                = "/"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200-299"
+  }
+
+  tags = {
+    Name = "web-tg"
+  }
+}
+
+resource "aws_lb_target_group_attachment" "attachment_instance_one" {
+  target_group_arn = aws_lb_target_group.web_tg.arn
+  target_id        = aws_instance.instance_one.id
+  port             = 80
+}
+
+resource "aws_lb_target_group_attachment" "attachment_instance_two" {
+  target_group_arn = aws_lb_target_group.web_tg.arn
+  target_id        = aws_instance.instance_two.id
+  port             = 80
+}
+
+resource "aws_lb_listener" "web_listener" {
+  load_balancer_arn = aws_lb.web_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_tg.arn
+  }
+}
