@@ -40,11 +40,11 @@ resource "aws_security_group" "allow_http" {
   }
 
   ingress {
-    description = "Allow SSH traffic"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description      = "Allow SSH traffic"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
@@ -109,8 +109,8 @@ resource "aws_eip" "elastic_ip" {
 }
 
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.elastic_ip.id
-  subnet_id     = aws_subnet.subnet_public_one.id
+  allocation_id     = aws_eip.elastic_ip.id
+  subnet_id         = aws_subnet.subnet_public_one.id
   connectivity_type = "public"
 
   depends_on = [aws_internet_gateway.internet_gateway]
