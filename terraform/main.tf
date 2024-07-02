@@ -1,3 +1,5 @@
+# TODO
+# ADD SECRETS INSTEAD OF HARDCODE
 provider "aws" {
   access_key = ""
   secret_key = ""
@@ -43,6 +45,7 @@ resource "aws_security_group" "allow_http" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
@@ -54,7 +57,7 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_subnet" "subnet_public" {
+resource "aws_subnet" "subnet_public_one" {
   vpc_id                  = aws_vpc.vpc_main.id
   cidr_block              = "10.0.3.0/24"
   availability_zone       = "us-west-2a"
@@ -68,25 +71,16 @@ resource "aws_subnet" "subnet_public_two" {
   map_public_ip_on_launch = true
 }
 
-resource "aws_subnet" "subnet_one" {
+resource "aws_subnet" "subnet_private_one" {
   vpc_id            = aws_vpc.vpc_main.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-west-2a"
 }
 
-resource "aws_subnet" "subnet_two" {
+resource "aws_subnet" "subnet_private_two" {
   vpc_id            = aws_vpc.vpc_main.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-west-2b"
-}
-
-resource "aws_instance" "hello_terraform_instance" {
-  ami           = "ami-03c983f9003cb9cd1"
-  instance_type = "t2.micro"
-  user_data     = file("user-data-apache.sh")
-
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = aws_subnet.subnet_public.id
 }
 
 resource "aws_instance" "instance_one" {
@@ -95,11 +89,7 @@ resource "aws_instance" "instance_one" {
   user_data     = file("user-data-apache.sh")
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = aws_subnet.subnet_one.id
-
-  tags = {
-    Name = "private one"
-  }
+  subnet_id              = aws_subnet.subnet_private_one.id
 }
 
 resource "aws_instance" "instance_two" {
@@ -108,26 +98,20 @@ resource "aws_instance" "instance_two" {
   user_data     = file("user-data-apache.sh")
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = aws_subnet.subnet_two.id
-
-  tags = {
-    Name = "private two"
-  }
+  subnet_id              = aws_subnet.subnet_private_two.id
 }
 
-resource "aws_eip" "nat" {
+resource "aws_eip" "elastic_ip" {
   domain = "vpc"
 
   depends_on = [aws_internet_gateway.internet_gateway]
 
-  tags = {
-    Name = "terraform created eip"
-  }
 }
 
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.subnet_public.id
+  allocation_id = aws_eip.elastic_ip.id
+  subnet_id     = aws_subnet.subnet_public_one.id
+  connectivity_type = "public"
 
   depends_on = [aws_internet_gateway.internet_gateway]
 }
@@ -151,17 +135,22 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.subnet_public.id
+  subnet_id      = aws_subnet.subnet_public_one.id
+  route_table_id = aws_default_route_table.default_public_route_table.id
+}
+
+resource "aws_route_table_association" "public_two" {
+  subnet_id      = aws_subnet.subnet_public_two.id
   route_table_id = aws_default_route_table.default_public_route_table.id
 }
 
 resource "aws_route_table_association" "private_one" {
-  subnet_id      = aws_subnet.subnet_one.id
+  subnet_id      = aws_subnet.subnet_private_one.id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_two" {
-  subnet_id      = aws_subnet.subnet_two.id
+  subnet_id      = aws_subnet.subnet_private_two.id
   route_table_id = aws_route_table.private.id
 }
 
@@ -171,19 +160,13 @@ resource "aws_lb" "web_alb" {
   security_groups    = [aws_security_group.allow_http.id]
 
   subnet_mapping {
-    subnet_id = aws_subnet.subnet_public.id
+    subnet_id = aws_subnet.subnet_public_one.id
   }
 
   subnet_mapping {
     subnet_id = aws_subnet.subnet_public_two.id
   }
-
-  tags = {
-    Name = "web-alb"
-  }
 }
-
-
 
 resource "aws_lb_target_group" "web_tg" {
   name     = "web-tg"
@@ -198,10 +181,6 @@ resource "aws_lb_target_group" "web_tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     matcher             = "200-299"
-  }
-
-  tags = {
-    Name = "web-tg"
   }
 }
 
