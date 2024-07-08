@@ -1,14 +1,10 @@
-# TODO
-# ADD SECRETS INSTEAD OF HARDCODE
-# This task is related to just setting up variables in general
 provider "aws" {
-  access_key = ""
-  secret_key = ""
-  region     = "us-west-2"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+  region     = var.aws_region
 }
 
 resource "aws_vpc" "vpc_main" {
-
   cidr_block = "10.0.0.0/16"
   tags = {
     Name = "terraform created VPC"
@@ -75,9 +71,6 @@ resource "aws_subnet" "subnet_private_two" {
   availability_zone = "us-west-2b"
 }
 
-# TODO
-# BRAINSTORM BETTER DESIGN FOR THE DEPENDS_ON
-
 resource "aws_instance" "instance_one" {
   ami           = "ami-03c983f9003cb9cd1"
   instance_type = "t2.micro"
@@ -86,7 +79,16 @@ resource "aws_instance" "instance_one" {
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = aws_subnet.subnet_private_one.id
 
-  depends_on = [ aws_internet_gateway.internet_gateway, aws_nat_gateway.nat, aws_route_table.private, aws_default_route_table.default_public_route_table, aws_route_table_association.private_one, aws_route_table_association.private_two, aws_route_table_association.public_one, aws_route_table_association.public_two  ]
+  depends_on = [
+    aws_internet_gateway.internet_gateway,
+    aws_nat_gateway.nat,
+    aws_route_table.private,
+    aws_default_route_table.default_public_route_table,
+    aws_route_table_association.private_one,
+    aws_route_table_association.private_two,
+    aws_route_table_association.public_one,
+    aws_route_table_association.public_two
+  ]
 }
 
 resource "aws_instance" "instance_two" {
@@ -97,14 +99,22 @@ resource "aws_instance" "instance_two" {
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = aws_subnet.subnet_private_two.id
 
-  depends_on = [ aws_internet_gateway.internet_gateway, aws_nat_gateway.nat, aws_route_table.private, aws_default_route_table.default_public_route_table, aws_route_table_association.private_one, aws_route_table_association.private_two, aws_route_table_association.public_one, aws_route_table_association.public_two  ]
+  depends_on = [
+    aws_internet_gateway.internet_gateway,
+    aws_nat_gateway.nat,
+    aws_route_table.private,
+    aws_default_route_table.default_public_route_table,
+    aws_route_table_association.private_one,
+    aws_route_table_association.private_two,
+    aws_route_table_association.public_one,
+    aws_route_table_association.public_two
+  ]
 }
 
 resource "aws_eip" "elastic_ip" {
   domain = "vpc"
 
   depends_on = [aws_internet_gateway.internet_gateway]
-
 }
 
 resource "aws_nat_gateway" "nat" {
