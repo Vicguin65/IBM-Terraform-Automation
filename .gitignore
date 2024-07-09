@@ -2,3 +2,5 @@ venv
 .env
 identity-store-lambda/.aws-sam/*
 identity-store-lambda/samconfig.toml
+*.tfvars
+node_modules/*

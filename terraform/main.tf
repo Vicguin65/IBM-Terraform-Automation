@@ -9,7 +9,7 @@ provider "aws" {
 
 resource "aws_vpc" "vpc_main" {
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr_block #variable file
   tags = {
     Name = "terraform created VPC"
   }
@@ -51,37 +51,37 @@ resource "aws_security_group" "allow_http" {
 
 resource "aws_subnet" "subnet_public_one" {
   vpc_id                  = aws_vpc.vpc_main.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "us-west-2a"
+  cidr_block              = var.subnet_public_one_cidr #variable file
+  availability_zone       = "us-west-2a" #allow terraform to pickup zone automatically
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "subnet_public_two" {
   vpc_id                  = aws_vpc.vpc_main.id
-  cidr_block              = "10.0.4.0/24"
-  availability_zone       = "us-west-2b"
+  cidr_block              = var.subnet_public_two_cidr #variable file
+  availability_zone       = "us-west-2b" #allow terraform to pickup zone automatically
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "subnet_private_one" {
   vpc_id            = aws_vpc.vpc_main.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-west-2a"
+  cidr_block        = var.subnet_private_one_cidr #variable file
+  availability_zone = "us-west-2a" #allow terraform to pickup zone automatically
 }
 
 resource "aws_subnet" "subnet_private_two" {
   vpc_id            = aws_vpc.vpc_main.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-west-2b"
+  cidr_block        = var.subnet_private_two_cidr #variable file
+  availability_zone = "us-west-2b" #allow terraform to pickup zone automatically
 }
 
 # TODO
 # BRAINSTORM BETTER DESIGN FOR THE DEPENDS_ON
 
 resource "aws_instance" "instance_one" {
-  ami           = "ami-03c983f9003cb9cd1"
-  instance_type = "t2.micro"
-  user_data     = file("user-data-apache.sh")
+  ami           = var.ami_id #variable file 
+  instance_type = var.instance_type #variable file//check with hazel if can run hazels application
+  user_data     = file(var.user_data_file)
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = aws_subnet.subnet_private_one.id
@@ -90,9 +90,9 @@ resource "aws_instance" "instance_one" {
 }
 
 resource "aws_instance" "instance_two" {
-  ami           = "ami-03c983f9003cb9cd1"
-  instance_type = "t2.micro"
-  user_data     = file("user-data-apache.sh")
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  user_data     = file(var.user_data_file) #variable file
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = aws_subnet.subnet_private_two.id
@@ -154,8 +154,8 @@ resource "aws_route_table_association" "private_two" {
 }
 
 resource "aws_lb" "web_alb" {
-  name               = "web-alb"
-  load_balancer_type = "application"
+  name               = var.lb_name #variable file
+  load_balancer_type = var.lb_type #variable file
   security_groups    = [aws_security_group.allow_http.id]
 
   subnet_mapping {
@@ -168,7 +168,7 @@ resource "aws_lb" "web_alb" {
 }
 
 resource "aws_lb_target_group" "web_tg" {
-  name     = "web-tg"
+  name     = var.tg_name #variable file
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.vpc_main.id
