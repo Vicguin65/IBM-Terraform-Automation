@@ -54,11 +54,94 @@
             <h2 class="hero-title">Can Polygraph Tests Effectively Discern Deceit in Criminal Cases?</h2>
         </div>
     </section>
+
+    <!-- Root element for the chatbot -->
+    <div id="chatbot-root"></div>
     
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 Your Company Name. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Include the compiled JavaScript file for your React app -->
+    <script src="static/js/main.js"></script>
+
+    <!-- Chatbot JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatbotRoot = document.getElementById("chatbot-root");
+
+            const header = document.createElement("div");
+            header.className = "chatbot-header";
+            header.innerText = "Chatbot";
+            chatbotRoot.appendChild(header);
+
+            const messages = document.createElement("div");
+            messages.className = "chatbot-messages";
+            chatbotRoot.appendChild(messages);
+
+            const inputContainer = document.createElement("div");
+            inputContainer.className = "chatbot-input";
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Type a message...";
+            inputContainer.appendChild(input);
+
+            const button = document.createElement("button");
+            button.innerText = "Send";
+            inputContainer.appendChild(button);
+
+            chatbotRoot.appendChild(inputContainer);
+
+            function addMessage(text, sender) {
+                const message = document.createElement("div");
+                message.className = `chatbot-message ${sender}`;
+                message.innerText = text;
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            }
+
+            button.addEventListener("click", function() {
+                const userInput = input.value;
+                if (userInput.trim() !== "") {
+                    addMessage(userInput, "user");
+                    input.value = "";
+
+                    // Handle specific queries
+                    if (userInput.toLowerCase().includes("date")) {
+                        const today = new Date();
+                        const botResponse = today.toDateString();
+                        addMessage(botResponse, "bot");
+                    } else {
+                        // Default response (simulated or actual API call)
+                        setTimeout(function() {
+                            const API_URL = 'https://jsonplaceholder.typicode.com/posts/1'; // Example API endpoint
+
+                            fetch(API_URL)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const botResponse = data.title; // Example: Assuming the API returns a JSON with 'title' field
+                                    addMessage(botResponse, "bot");
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching data:', error);
+                                    const errorMessage = 'Error fetching data. Please try again.'; // Error message handling
+                                    addMessage(errorMessage, "bot");
+                                });
+                        }, 1000);
+                    }
+                }
+            });
+
+            input.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    button.click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
