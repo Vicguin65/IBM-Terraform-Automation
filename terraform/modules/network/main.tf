@@ -15,7 +15,7 @@ data "aws_availability_zones" "available" {
 }
 
 resource "aws_subnet" "public_subnets" {
-  count = length(var.public_subnet_cidrs)
+  count                   = length(var.public_subnet_cidrs)
   vpc_id                  = aws_vpc.vpc_main.id
   cidr_block              = var.public_subnet_cidrs[count.index] #variable file
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -23,10 +23,10 @@ resource "aws_subnet" "public_subnets" {
 }
 
 resource "aws_subnet" "private_subnets" {
-  count = length(var.public_subnet_cidrs)
-  vpc_id                  = aws_vpc.vpc_main.id
-  cidr_block              = var.private_subnet_cidrs[count.index] #variable file
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  count             = length(var.public_subnet_cidrs)
+  vpc_id            = aws_vpc.vpc_main.id
+  cidr_block        = var.private_subnet_cidrs[count.index] #variable file
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 }
 
 resource "aws_eip" "elastic_ip" {
@@ -62,13 +62,13 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = length(aws_subnet.public_subnets)
+  count          = length(aws_subnet.public_subnets)
   subnet_id      = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_default_route_table.default_public_route_table.id
 }
 
 resource "aws_route_table_association" "private" {
-  count = length(aws_subnet.private_subnets)
+  count          = length(aws_subnet.private_subnets)
   subnet_id      = aws_subnet.private_subnets[count.index].id
   route_table_id = aws_route_table.private.id
 }

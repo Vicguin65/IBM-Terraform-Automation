@@ -12,10 +12,10 @@ module "network" {
 }
 
 module "alb" {
-  source = "./modules/alb"
-  public_subnets_ids = module.network.public_subnet_ids
+  source              = "./modules/alb"
+  public_subnets_ids  = module.network.public_subnet_ids
   private_subnets_ids = module.network.private_subnet_ids
-  vpc_id = module.network.vpc_id
+  vpc_id              = module.network.vpc_id
 
-  depends_on = [ module.network ]
+  depends_on = [module.network]
 }
