@@ -1,5 +1,5 @@
 {
-  "name": "liedetector",
+  "name": "lie_detect",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
