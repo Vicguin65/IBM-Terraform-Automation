@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { WebChatContainer, setEnableDebug } from '@ibm-watson/assistant-web-chat-react';
+import axios from 'axios';
 import './Chatbot.css';
+
+// Enable debug mode for Watson Assistant Web Chat
+setEnableDebug(true);
+
+const webChatOptions = {
+  integrationID: 'YOUR_INTEGRATION_ID', // Replace with your integration ID
+  region: 'us-east-2', // Replace with your region
+  serviceInstanceID: 'YOUR_SERVICE_INSTANCE_ID', // Replace with your service instance ID
+  // subscriptionID: 'only on enterprise plans',
+};
 
 class Chatbot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: [],
       isOpen: this.props.isOpen, // Track whether the chatbot is open or closed
     };
     this.sessionId = null;
-  }
-
-  componentDidMount() {
-    this.createSession();
   }
 
   componentDidUpdate(prevProps) {
@@ -25,12 +31,12 @@ class Chatbot extends Component {
   async createSession() {
     try {
       const response = await axios.post(
-        'https://api.us-south.assistant.watson.cloud.ibm.com/instances/89dda75b-28ae-40eb-932e-35f4df82533f/v2/assistants/010a07ad-8998-4c57-ba89-2321aded77b6/sessions?version=2020-04-01',
+        `https://api.${webChatOptions.region}.assistant.watson.cloud.ibm.com/instances/${webChatOptions.serviceInstanceID}/v2/assistants/YOUR_ASSISTANT_ID/sessions?version=2020-04-01`,
         {},
         {
           auth: {
             username: 'apikey',
-            password: 'rJrAULj6TzpYhJ8tRBGE6AkeEUxc1Y2edr-fbvhLdCz4',
+            password: 'YOUR_API_KEY',
           },
         }
       );
@@ -48,7 +54,7 @@ class Chatbot extends Component {
 
     try {
       const response = await axios.post(
-        `https://api.us-south.assistant.watson.cloud.ibm.com/instances/YOUR_INSTANCE_ID/v2/assistants/YOUR_ASSISTANT_ID/sessions/${this.sessionId}/message?version=2020-04-01`,
+        `https://api.${webChatOptions.region}.assistant.watson.cloud.ibm.com/instances/${webChatOptions.serviceInstanceID}/v2/assistants/YOUR_ASSISTANT_ID/sessions/${this.sessionId}/message?version=2020-04-01`,
         {
           input: {
             text: text,
@@ -101,7 +107,7 @@ class Chatbot extends Component {
   };
 
   render() {
-    const { messages, isOpen } = this.state;
+    const { isOpen } = this.state;
 
     return (
       <div className={`chatbot ${isOpen ? 'open' : ''}`}>
@@ -109,22 +115,9 @@ class Chatbot extends Component {
           <div className="chatbot-header" onClick={this.props.toggleChatbot}>
             Chatbot
           </div>
-          <div className="chatbot-messages">
-            {messages.map((message, index) => (
-              <div key={index} className={`chatbot-message ${message.sender}`}>
-                {message.text}
-              </div>
-            ))}
-          </div>
-          <div className="chatbot-input">
-            <input
-              type="text"
-              placeholder="Type a message..."
-              ref={(input) => (this.input = input)}
-              onKeyPress={this.handleKeyPress}
-            />
-            <button onClick={this.handleSubmit}>Send</button>
-          </div>
+          {isOpen && (
+            <WebChatContainer config={webChatOptions} />
+          )}
         </div>
       </div>
     );
