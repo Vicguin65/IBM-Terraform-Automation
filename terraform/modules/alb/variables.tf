@@ -13,7 +13,7 @@ variable "instance_type" {
 variable "user_data_file" {
   description = "Path to the user data script file"
   type        = string
-  default     = "react-data-apache.sh"
+  default     = "./modules/alb/react-data-apache.sh"
 }
 
 variable "lb_name" {
@@ -35,13 +35,22 @@ variable "tg_name" {
 }
 
 variable "public_subnets_ids" {
+  description = "List of public subnet ids"
   type = list(string)
 }
 
 variable "private_subnets_ids" {
+  description = "List of private subnet ids"
   type = list(string)
 }
 
 variable "vpc_id" {
+  description = "VPC ID for network"
   type = string
+}
+
+variable "ssl_certificate_arn" {
+  description = "ARN of SSL Certificate"
+  type        = string
+  default     = "arn:aws:acm:us-west-2:416469482962:certificate/ca2f258f-31ee-470a-bfdb-e3ed7fba7def"
 }
