@@ -4,6 +4,7 @@ import './styles.css'; // Import additional CSS file
 import DataAnalytics from './DataAnalytics'; // Import DataAnalytics component
 import Chatbot from './Chatbot'; // Import Chatbot component
 import About from './About';
+import Resources from './Resources';
 
 // Header component with conditional rendering based on activeTab
 const Header = ({ activeTab, setActiveTab }) => (
@@ -55,15 +56,18 @@ const App = () => {
       {activeTab === 'home' && (
         <>
           <HeroSection />
+          <button className="chatbot-toggle-button" onClick={toggleChatbot}>
+            {isChatbotOpen ? 'Close Chatbot' : 'Open Chatbot'}
+          </button>
           <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
         </>
       )}
       {activeTab === 'data-analytics' && <DataAnalytics />}
       {activeTab === 'about' && <About />}
+      {activeTab === 'resources' && <Resources />}
       <Footer activeTab={activeTab} />
     </div>
   );
 };
 
 export default App;
-
