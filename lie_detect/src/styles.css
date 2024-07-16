@@ -189,3 +189,17 @@ body {
 .chatbot-message.bot {
     text-align: left;
 }
+/* styles.css */
+
+.section {
+    padding: 50px 0; /* Adjust padding as needed */
+    text-align: center;
+  }
+  
+  .section img {
+    max-width: 100%; /* Ensures image scales down to fit container */
+    height: auto; /* Maintains aspect ratio */
+    display: block; /* Centers image within container */
+    margin: 0 auto 20px; /* Centers image and adds bottom margin */
+  }
+  
