@@ -7,9 +7,9 @@ import './Chatbot.css';
 setEnableDebug(true);
 
 const webChatOptions = {
-  integrationID: 'YOUR_INTEGRATION_ID', // Replace with your integration ID
-  region: 'us-east-2', // Replace with your region
-  serviceInstanceID: 'YOUR_SERVICE_INSTANCE_ID', // Replace with your service instance ID
+  integrationID: "6d2ce3a6-2d75-4d0d-9a19-dfb970e24759", // Replace with your integration ID
+  region: 'us-east', // Replace with your region
+  serviceInstanceID: "89dda75b-28ae-40eb-932e-35f4df82533f", // Replace with your service instance ID
   // subscriptionID: 'only on enterprise plans',
 };
 
