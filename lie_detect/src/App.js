@@ -26,8 +26,10 @@ const Header = ({ activeTab, setActiveTab }) => (
 const HeroSection = () => (
   <section id="home" className="hero">
     <div className="container">
-      <img src="AdobeStock_290225771.jpeg" alt="Description of your image" style={{ maxWidth: '100%', display: 'block', margin: '0 auto 20px' }} />
       <h2 className="hero-title">Can Polygraph Tests Effectively Discern Deceit in Criminal Cases?</h2>
+      <img src={require("./assets/AdobeStock_290225771.jpeg")} alt="Description of your image" 
+      style={{ maxWidth: '100%', display: 'block', margin: '0 auto 20px' }} />
+
     </div>
   </section>
 );

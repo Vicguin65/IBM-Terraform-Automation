@@ -12,7 +12,7 @@ const About = () => {
           </p>
         </div>
 
-        <img src="/path-to-your-image/Polygraph_Test.jpeg" alt="Description of your image" className="about-image" />
+        <img src={require("./assets/Polygraph_Test.jpeg")} alt="About Image" className="about-image" />
       </section>
     </div>
   );

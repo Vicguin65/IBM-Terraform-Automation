@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 /* Basic styling */
 body {
     font-family: 'Roboto', sans-serif; /* Use Roboto font */
@@ -90,6 +91,17 @@ body {
     margin: 0 auto;
 }
 
+/*For Graph*/
+.explanation {
+    text-align: left;
+}
+
+/* Resources */
+.resources {
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
 .footer {
     background-color: #333333; /* Updated background color */
     color: #a3a190; /* Updated font color */
