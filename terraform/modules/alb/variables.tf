@@ -54,3 +54,4 @@ variable "ssl_certificate_arn" {
   type        = string
   default     = "arn:aws:acm:us-west-2:416469482962:certificate/ca2f258f-31ee-470a-bfdb-e3ed7fba7def"
 }
+

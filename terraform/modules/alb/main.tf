@@ -1,3 +1,54 @@
+resource "aws_cognito_user_pool" "pool" {
+  name                        = "mypool"
+  mfa_configuration          = "OFF"
+  sms_authentication_message = "Your code is {####}"
+
+  software_token_mfa_configuration {
+    enabled = false
+  }
+
+  password_policy {
+    minimum_length                   = 6
+    require_lowercase                = false
+    require_numbers                  = false
+    require_symbols                  = false
+    require_uppercase                = false
+    temporary_password_validity_days = 7
+  }
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+
+    recovery_mechanism {
+      name     = "verified_phone_number"
+      priority = 2
+    }
+  }
+}
+
+resource "aws_cognito_user_pool_client" "client" {
+  name         = "myclient"
+  user_pool_id = aws_cognito_user_pool.pool.id
+}
+
+data "template_file" "app_js" {
+  template = file("${path.module}/../../../lie_detect/src/App.template.js")
+
+  vars = {
+    user_pool_id = aws_cognito_user_pool.pool.id
+    client_id    = aws_cognito_user_pool_client.client.id
+  }
+}
+
+resource "local_file" "app_js" {
+  content  = data.template_file.app_js.rendered
+  filename = "${path.module}/../../lie_detect/src/App.template.js"
+}
+
+
 resource "aws_security_group" "allow_http" {
   name        = "allow_http"
   description = "Allow http/https inbound traffic and all outbound traffic"
@@ -118,3 +169,5 @@ resource "aws_lb_listener" "http_listener" {
     }
   }
 }
+
+
