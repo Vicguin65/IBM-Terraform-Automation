@@ -28,24 +28,14 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_instance" "instance_one" {
+resource "aws_instance" "web_app_instance"{
+  for_each = toset(var.private_subnets_ids)
   ami           = var.ami_id        #variable file 
   instance_type = var.instance_type #variable file//check with hazel if can run hazels application
   user_data     = file(var.user_data_file)
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = var.private_subnets_ids[0]
-
-}
-
-resource "aws_instance" "instance_two" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  user_data     = file(var.user_data_file) #variable file
-
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = var.private_subnets_ids[1]
-
+  subnet_id              = each.key
 }
 
 resource "aws_lb" "web_alb" {

@@ -7,8 +7,7 @@ sudo apt-get install -y npm
 # Clone the repository
 cd /home/ubuntu
 sudo git clone https://github.com/Vicguin65/IBM-Identity-Center-API.git
-cd dynamic-app
-cd my-app
+cd lie_detect
 
 # Install dependencies and build the React app
 npm install

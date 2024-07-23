@@ -52,5 +52,5 @@ variable "vpc_id" {
 variable "ssl_certificate_arn" {
   description = "ARN of SSL Certificate"
   type        = string
-  default     = "arn:aws:acm:us-west-2:416469482962:certificate/ca2f258f-31ee-470a-bfdb-e3ed7fba7def"
+  default     = "arn:aws:acm:us-west-2:416469482962:certificate/c92845af-5043-4711-820a-1b80d18dc851"
 }
