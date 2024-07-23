@@ -28,7 +28,7 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_instance" "web_app_instance"{
+resource "aws_instance" "web_app_instance" {
   count = length(var.private_subnets_ids)
 
   ami           = var.ami_id        #variable file 
