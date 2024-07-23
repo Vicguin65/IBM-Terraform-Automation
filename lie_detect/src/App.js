@@ -98,44 +98,17 @@ const App = () => {
   return (
     <div className="App">
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-      {activeTab === 'home' && (
-        <>
-          <HeroSection />
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Password:</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
-          </form>
-          {message && <p>{message}</p>}
-          <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? 'Create an account' : 'Back to login'}
-          </button>
-          <button className="chatbot-toggle-button" onClick={toggleChatbot}>
-            {isChatbotOpen ? 'Close Chatbot' : 'Open Chatbot'}
-          </button>
-          <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
-        </>
-      )}
+      {activeTab === 'home' && <HeroSection />}
       {activeTab === 'data-analytics' && <DataAnalytics />}
       {activeTab === 'about' && <About />}
       {activeTab === 'resources' && <Resources />}
       <Footer activeTab={activeTab} />
+      <>
+          <button className="chatbot-toggle-button" onClick={toggleChatbot}>
+            {isChatbotOpen ? 'Close Chatbot' : 'Open Chatbot'}
+          </button>
+          <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
+       </>
     </div>
   );
 };
