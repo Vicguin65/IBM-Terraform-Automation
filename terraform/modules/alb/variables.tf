@@ -36,17 +36,17 @@ variable "tg_name" {
 
 variable "public_subnets_ids" {
   description = "List of public subnet ids"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "private_subnets_ids" {
   description = "List of private subnet ids"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "vpc_id" {
   description = "VPC ID for network"
-  type = string
+  type        = string
 }
 
 variable "ssl_certificate_arn" {
@@ -54,3 +54,51 @@ variable "ssl_certificate_arn" {
   type        = string
   default     = "arn:aws:acm:us-west-2:416469482962:certificate/c92845af-5043-4711-820a-1b80d18dc851"
 }
+
+variable "domain_name" {
+  description = "Domain name of Cognito Domain"
+  type        = string
+  default     = "rcos-cloud-authentication2024"
+}
+
+variable "client_name" {
+  description = "Name of Cognito Client"
+  type        = string
+  default     = "my-client"
+}
+
+variable "user_pool_name" {
+  description = "Name of user pool"
+  type        = string
+  default     = "my_pool"
+}
+
+# Verification Message Template Variables
+variable "verification_default_email_option" {
+  description = "The default email option for verification."
+  type        = string
+  default     = "CONFIRM_WITH_CODE"
+}
+
+variable "verification_email_message" {
+  description = "The email message for verification."
+  type        = string
+  default     = "Your verification code is {####}."
+}
+
+variable "verification_email_subject" {
+  description = "The subject of the email verification message."
+  type        = string
+  default     = "Your verification code"
+}
+
+variable "verification_sms_message" {
+  description = "The SMS message for verification."
+  type        = string
+  default     = "Your verification code is {####}."
+}
+
+
+
+
+
