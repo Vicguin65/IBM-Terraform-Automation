@@ -55,19 +55,17 @@ const App = () => {
   return (
     <div className="App">
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-      {activeTab === 'home' && (
-        <>
-          <HeroSection />
-          <button className="chatbot-toggle-button" onClick={toggleChatbot}>
-            {isChatbotOpen ? 'Close Chatbot' : 'Open Chatbot'}
-          </button>
-          <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
-        </>
-      )}
+      {activeTab === 'home' && <HeroSection />}
       {activeTab === 'data-analytics' && <DataAnalytics />}
       {activeTab === 'about' && <About />}
       {activeTab === 'resources' && <Resources />}
       <Footer activeTab={activeTab} />
+      <>
+          <button className="chatbot-toggle-button" onClick={toggleChatbot}>
+            {isChatbotOpen ? 'Close Chatbot' : 'Open Chatbot'}
+          </button>
+          <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
+       </>
     </div>
   );
 };
