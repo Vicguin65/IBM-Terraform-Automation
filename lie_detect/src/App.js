@@ -6,8 +6,6 @@ import Chatbot from './Chatbot'; // Import Chatbot component
 import About from './About';
 import Resources from './Resources';
 
-const userPool = new CognitoUserPool(poolData);
-
 // Header component with conditional rendering based on activeTab
 const Header = ({ activeTab, setActiveTab }) => (
   <header className={`header ${activeTab === 'data-analytics' ? 'hidden' : ''}`}>
