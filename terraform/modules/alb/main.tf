@@ -120,19 +120,19 @@ resource "aws_lb_listener" "http_listener" {
 
 
 resource "aws_cognito_user_pool" "pool" {
-  name                        = "mypool"
+  name                        = var.user_pool_name
   mfa_configuration          = "OFF"
-  sms_authentication_message = "Your code is {####}"
+  sms_authentication_message = var.verification_sms_message
 
-  # Verification configuration
+  # Verification
   verification_message_template {
-    default_email_option = "CONFIRM_WITH_CODE"
-    email_message        = "Your verification code is {####}."
-    email_subject        = "Your verification code"
-    sms_message          = "Your verification code is {####}."
+    default_email_option = var.verification_default_email_option
+    email_message        = var.verification_email_message
+    email_subject        = var.verification_email_subject
+    sms_message          = var.verification_sms_message
   }
 
-  # Enable verification for email
+  # Enable verification 
   auto_verified_attributes = ["email"]
 
   # Configure password policy
@@ -157,13 +157,13 @@ resource "aws_cognito_user_pool" "pool" {
 
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  domain      = "rcos-cloud-authentication2024"
+  domain      = var.domain_name
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 
 resource "aws_cognito_user_pool_client" "client" {
-  name                                 = "myclient"
+  name                                 = var.client_name
   user_pool_id                         = aws_cognito_user_pool.pool.id
   generate_secret                      = true  # This makes it a confidential client
 
