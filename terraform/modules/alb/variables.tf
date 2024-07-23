@@ -36,17 +36,17 @@ variable "tg_name" {
 
 variable "public_subnets_ids" {
   description = "List of public subnet ids"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "private_subnets_ids" {
   description = "List of private subnet ids"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "vpc_id" {
   description = "VPC ID for network"
-  type = string
+  type        = string
 }
 
 variable "ssl_certificate_arn" {

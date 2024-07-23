@@ -108,19 +108,19 @@ resource "aws_lb_listener" "http_listener" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "redirect"
+    type = "redirect"
 
     redirect {
       status_code = "HTTP_301"
-      protocol = "HTTPS"
-      port = 443
+      protocol    = "HTTPS"
+      port        = 443
     }
   }
 }
 
 
 resource "aws_cognito_user_pool" "pool" {
-  name                        = var.user_pool_name
+  name                       = var.user_pool_name
   mfa_configuration          = "OFF"
   sms_authentication_message = var.verification_sms_message
 
@@ -157,42 +157,42 @@ resource "aws_cognito_user_pool" "pool" {
 
 
 resource "aws_cognito_user_pool_domain" "domain" {
-  domain      = var.domain_name
+  domain       = var.domain_name
   user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 
 resource "aws_cognito_user_pool_client" "client" {
-  name                                 = var.client_name
-  user_pool_id                         = aws_cognito_user_pool.pool.id
-  generate_secret                      = true  # This makes it a confidential client
+  name            = var.client_name
+  user_pool_id    = aws_cognito_user_pool.pool.id
+  generate_secret = true # This makes it a confidential client
 
   # Valid explicit auth flows for OAuth
-  explicit_auth_flows                  = [
+  explicit_auth_flows = [
     "ALLOW_USER_SRP_AUTH",
     "ALLOW_USER_PASSWORD_AUTH",
     "ALLOW_REFRESH_TOKEN_AUTH"
   ]
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes                 = [
+  allowed_oauth_scopes = [
     "openid",
     "profile",
     "email",
     "phone",
     "aws.cognito.signin.user.admin"
   ]
-  callback_urls                        = ["https://${aws_lb.web_alb.dns_name}/oauth2/idpresponse"]
+  callback_urls = ["https://${aws_lb.web_alb.dns_name}/oauth2/idpresponse"]
 
-  access_token_validity                = 2  
-  id_token_validity                    = 2  
-  refresh_token_validity               = 24  
-  supported_identity_providers         = ["COGNITO"]
+  access_token_validity        = 2
+  id_token_validity            = 2
+  refresh_token_validity       = 24
+  supported_identity_providers = ["COGNITO"]
 }
 
- 
+
 resource "aws_lb_listener_rule" "cognito-authentication" {
-  listener_arn = aws_lb_listener.https_listener.arn  
+  listener_arn = aws_lb_listener.https_listener.arn
 
   action {
     type = "authenticate-cognito"
