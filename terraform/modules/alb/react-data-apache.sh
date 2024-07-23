@@ -17,6 +17,7 @@ npm run build
 # Copy the build files to the Apache root directory
 sudo cp -a build/. /var/www/html/
 
+
 # Start and enable Apache
 sudo systemctl start apache2
 sudo systemctl enable apache2

@@ -9,11 +9,11 @@ terraform {
 
   # backend specifies where the state files are stored
   backend "s3" {
-    bucket = "rcos-terraform"
-    key    = "state/terraform.tfstate"
-    region = "us-east-1"
+    bucket  = "rcos-terraform"
+    key     = "state/terraform.tfstate"
+    region  = "us-east-1"
     encrypt = true
-    
+
     # this table specifies where a lock is created to prevent a race condition
     dynamodb_table = "terraform_tf_lockid"
   }
@@ -37,3 +37,4 @@ module "alb" {
 
   depends_on = [module.network]
 }
+
