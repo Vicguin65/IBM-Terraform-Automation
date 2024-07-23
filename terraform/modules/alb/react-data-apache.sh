@@ -7,11 +7,11 @@ sudo apt-get install -y npm
 # Clone the repository
 cd /home/ubuntu
 sudo git clone https://github.com/Vicguin65/IBM-Identity-Center-API.git
-cd lie_detect
+cd IBM-Identity-Center-API/lie_detect
 
 # Install dependencies and build the React app
-npm install
-npm run build
+sudo npm install
+sudo npm run build
 
 # Copy the build files to the Apache root directory
 sudo cp -a build/. /var/www/html/

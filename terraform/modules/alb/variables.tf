@@ -7,7 +7,7 @@ variable "ami_id" {
 variable "instance_type" {
   description = "Instance type for EC2 instances"
   type        = string
-  default     = "t2.micro"
+  default     = "t2.medium"
 }
 
 variable "user_data_file" {
