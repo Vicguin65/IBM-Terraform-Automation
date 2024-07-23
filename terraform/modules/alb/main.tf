@@ -29,13 +29,14 @@ resource "aws_security_group" "allow_http" {
 }
 
 resource "aws_instance" "web_app_instance"{
-  for_each = toset(var.private_subnets_ids)
+  count = length(var.private_subnets_ids)
+
   ami           = var.ami_id        #variable file 
   instance_type = var.instance_type #variable file//check with hazel if can run hazels application
   user_data     = file(var.user_data_file)
 
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = each.key
+  subnet_id              = var.private_subnets_ids[count.index]
 }
 
 resource "aws_lb" "web_alb" {
@@ -69,14 +70,10 @@ resource "aws_lb_target_group" "web_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "attachment_instance_one" {
-  target_group_arn = aws_lb_target_group.web_tg.arn
-  target_id        = aws_instance.instance_one.id
-  port             = 80
-}
+  count = length(aws_instance.web_app_instance)
 
-resource "aws_lb_target_group_attachment" "attachment_instance_two" {
   target_group_arn = aws_lb_target_group.web_tg.arn
-  target_id        = aws_instance.instance_two.id
+  target_id        = aws_instance.web_app_instance[count.index].id
   port             = 80
 }
 
