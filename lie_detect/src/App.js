@@ -8,8 +8,8 @@ import About from './About';
 import Resources from './Resources';
 
 const poolData = {
-  UserPoolId: "REPLACE_USER_POOL_ID", // Placeholder for user pool id
-  ClientId: "$REPLACE_CLIENT_ID"       // Placeholder for client id
+  UserPoolId: process.env.USERPOOLID, // Placeholder for user pool id
+  ClientId: process.env.CLIENTID       // Placeholder for client id
 };
 
 const userPool = new CognitoUserPool(poolData);
