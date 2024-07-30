@@ -112,9 +112,6 @@ class Chatbot extends Component {
     return (
       <div className={`chatbot ${isOpen ? 'open' : ''}`}>
         <div className="chatbot-content">
-          <div className="chatbot-header" onClick={this.props.toggleChatbot}>
-            Chatbot
-          </div>
           {isOpen && (
             <WebChatContainer config={webChatOptions} />
           )}

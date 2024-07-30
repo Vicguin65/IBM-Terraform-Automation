@@ -37,7 +37,7 @@ const HeroSection = () => (
 const Footer = ({ activeTab }) => (
   <footer className={`footer ${activeTab === 'data-analytics' ? 'hidden' : ''}`}>
     <div className="container">
-      <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+      <p>&copy; 2024 RPI Cloud Coders. All rights reserved.</p>
     </div>
   </footer>
 );
