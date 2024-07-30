@@ -7,7 +7,7 @@ env:
   TF_CLOUD_ORGANIZATION: "RCOS_Terraform"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "terraform-automatic-github-deploy"
-  CONFIG_DIRECTORY: "./"
+  CONFIG_DIRECTORY: "./terraform/"
 
 jobs:
   terraform:
