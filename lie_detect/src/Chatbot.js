@@ -17,7 +17,7 @@ class Chatbot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: this.props.isOpen, // Track whether the chatbot is open or closed
+      messages: [], // Initialize messages array
     };
     this.sessionId = null;
   }
@@ -107,11 +107,13 @@ class Chatbot extends Component {
   };
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen } = this.props;
 
     return (
       <div className={`chatbot ${isOpen ? 'open' : ''}`}>
         <div className="chatbot-content">
+          <div className="chatbot-header" onClick={this.props.toggleChatbot}>
+          </div>
           {isOpen && (
             <WebChatContainer config={webChatOptions} />
           )}

@@ -1,18 +1,4 @@
 /* Chatbot.css */
-.chatbot {
-  position: fixed;
-  bottom: 0;
-  right: 20px;
-  width: 300px;
-  max-height: 80%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  transform: translateY(100%);
-}
 
 .chatbot.open {
   transform: translateY(0);

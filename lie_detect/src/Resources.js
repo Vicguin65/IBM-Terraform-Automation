@@ -16,7 +16,7 @@ const Resources = () => {
       <section id="resources" className="section">
         <div className="container">
           <h2>Resources</h2>
-          <p>Find useful resources and tools.</p>
+          <p>Explore our Resources tab to access a curated collection of links to the references and data sources we used to gather information and create our graphs.</p>
           <p className="resources">
           “The Polygraph and Lie Detection" at Nap.Edu.” 5 Evidence
            from Polygraph Research: Quantitative Assessment | The Polygraph 
