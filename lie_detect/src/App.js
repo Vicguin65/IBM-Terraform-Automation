@@ -29,6 +29,9 @@ const HeroSection = () => (
       <h2 className="hero-title">Can Polygraph Tests Effectively Discern Deceit in Criminal Cases?</h2>
       <img src={require("./assets/AdobeStock_290225771.jpeg")} alt="Description of your image" 
       style={{ maxWidth: '100%', display: 'block', margin: '0 auto 20px' }} />
+      <p style={{ textAlign: 'left' }}>
+        Lie detectors, or polygraph tests, measure physiological responses such as heart rate, blood pressure, respiration, and skin conductivity to determine whether a person is being truthful. The underlying assumption is that deceptive answers will produce physiological responses that differ from those associated with truthful answers. While polygraph tests can indicate stress or nervousness, which may be associated with lying, they are not foolproof and can be influenced by various factors such as anxiety, medical conditions, or the subject's ability to control their physiological responses. Polygraph accuracy is a subject of debate. Some studies suggest they are highly accurate, while others argue they have significant limitations and potential for false positives and negatives. Due to these limitations, polygraph results are not universally admissible in court and are often used in conjunction with other investigative techniques. Advances in technology and methodology aim to improve the reliability of lie detection, but the current consensus is that while polygraphs can provide useful information, they are not definitive proof of deception.
+      </p>
     </div>
   </section>
 );
@@ -70,3 +73,4 @@ const App = () => {
 };
 
 export default App;
+

@@ -1,0 +1,60 @@
+/* Ensure header spans the full width and has a background color and border */
+.header {
+    width: 100%;
+    background-color: #f8f9fa; /* Adjust background color as needed */
+    border-bottom: 10px solid #ccc; /* Add a bottom border */
+    padding-bottom: 5px; /* Adds space below the content to make the border appear higher */
+}
+
+/* Center the navbar content horizontally */
+.navbar {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    padding: 10px 0; /* Padding around navbar items */
+}
+
+/* Center the content within the container */
+.container {
+    display: flex;
+    justify-content: center; /* Center content within the container */
+    width: 100%;
+    max-width: 1200px; /* Limit maximum width for better layout */
+    padding: 0 20px; /* Add padding for responsiveness */
+}
+
+/* Style the navigation links */
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* Adjust spacing between navigation items */
+.nav-links li {
+    margin: 0 10px; /* Reduced spacing between navigation items */
+}
+
+/* Style for links and buttons */
+.nav-links a,
+.nav-links button {
+    text-decoration: none;
+    color: #333; /* Adjust text color */
+    font-weight: bold;
+    padding: 8px 15px; /* Adjust padding for better spacing */
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* Style for buttons */
+.nav-links button {
+    background-color: #007bff; /* Button background color */
+    color: white;
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Hover effect for buttons */
+.nav-links button:hover {
+    background-color: #0056b3; /* Button hover color */
+}
