@@ -13,7 +13,7 @@ env:
 
 jobs:
   terraform:
-    if: github.repository != 'Vicguin65/IBM-Terraform-Automation'
+    if: github.repository == 'Vicguin65/IBM-Terraform-Automation'
     name: "Terraform Apply"
     runs-on: ubuntu-latest
     permissions:
