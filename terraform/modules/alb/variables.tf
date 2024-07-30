@@ -98,6 +98,12 @@ variable "verification_sms_message" {
   default     = "Your verification code is {####}."
 }
 
+variable "mfa_configuration" {
+  description = "The SMS message for verification."
+  type        = string
+  default     = "OFF"
+}
+
 
 
 
