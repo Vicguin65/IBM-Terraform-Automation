@@ -9,7 +9,7 @@ resource "aws_vpc" "vpc_main" {
   # The CIDR block for the VPC is provided in the variable file
   cidr_block = var.vpc_cidr_block 
   tags = {
-    Name = "terraform created VPC"
+    Name = "Terraform VPC"
   }
 }
 

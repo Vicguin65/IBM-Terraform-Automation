@@ -1,7 +1,7 @@
 /*
 This module creates an Application Load Balancer (ALB) for the VPC, along with a 
 security group that permits inbound HTTP (port 80) and HTTPS (port 443) traffic, and all outbound 
-traffic. It deploys four EC2 instances across private subnets, and configures an ALB to route
+traffic. It deploys two EC2 instances across 2 private subnets, and configures an ALB to route
  HTTP traffic to the EC2 instances. Additionally, it sets up a Cognito User Pool for authentication, along 
  with a user pool domain and confidential client for OAuth, and adds a listener rule for user authentication via Cognito, 
  forwarding traffic to the target group.
