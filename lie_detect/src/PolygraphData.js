@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './styles.css';
-import Plot from "react-plotly.js"
-import {usestate} from "react";
+import Plot from "react-plotly.js";
 
 const PolygraphChart = () => {
+
+   const [graphType, changeGraph] = useState("bar");
 
     const barData = [
       {
@@ -21,16 +22,45 @@ const PolygraphChart = () => {
       }
     ];
 
+
+    DisplayGraph()
+    {
+      if(graphType === "bar")
+      {
+        return(
+            <Plot
+                data={barData}
+                layout={{
+                    width: 1000, height: 700, 
+                    title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
+                    xaxis: {title: 'Test Accuracy'},
+                    yaxis: { title: 'Percentage of Outcome'}
+                }}
+            />
+        );
+      }
+      else if(graphType === "pie")
+      {
+        return(
+          <Plot
+              data={pieData}
+              layout={{
+                  width: 1000, height: 700, 
+                  title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
+                  xaxis: {title: 'Test Accuracy'},
+                  yaxis: { title: 'Percentage of Outcome'}
+              }}
+          />
+        );
+      }
+    }
+
     return(
-        <Plot
-            data={barData}
-            layout={{
-                width: 1000, height: 700, 
-                title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
-                xaxis: {title: 'Test Accuracy'},
-                yaxis: { title: 'Percentage of Outcome'}
-            }}
-        />
+      <div>
+         <button onClick={() => setChartType('bar')}>Bar Chart</button>
+         <button onClick={() => setChartType('pie')}>Pie Chart</button>
+         {DisplayGraph}
+      </div>
     );
 }
 

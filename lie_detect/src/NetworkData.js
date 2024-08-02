@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './styles.css';
-import Plot from "react-plotly.js"
-import {usestate} from "react";
+import Plot from "react-plotly.js";
 
 const NetworkChart = () => {
     //use state to switch graphs
@@ -69,16 +68,48 @@ const NetworkChart = () => {
       }
     ];
 
-    return(
-        <Plot
-            data={barData}
+    DisplayGraph() 
+    {
+      if(graphType === "bar")
+      {
+        return(
+            <Plot
+                data={barData}
+                layout={{
+                  width: 1000, height: 700,
+                  barmode: 'group',
+                  title: 'Performance of Four Neural Network Models in Lie Detection',
+                  yaxis: { title: 'Percentage', range: [90, 100] },
+                  xaxis: { title: 'Neural Network Type' },
+                }}
+            />
+        );
+      }
+
+      if(graphType === "pie")
+      {
+        return (
+          <Plot
+            data={pieData}
             layout={{
-                width: 1000, height: 700, 
-                title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
-                xaxis: {title: 'Test Accuracy'},
-                yaxis: { title: 'Percentage of Outcome'}
+              width: 1000, height: 700,
+              barmode: 'group',
+              title: 'Performance of Four Neural Network Models in Lie Detection',
+              yaxis: { title: 'Percentage', range: [90, 100] },
+              xaxis: { title: 'Neural Network Type' },
             }}
-        />
+          />
+        );
+      }
+    }
+
+
+    return(
+      <div>
+         <button onClick={() => setChartType('bar')}>Bar Chart</button>
+         <button onClick={() => setChartType('pie')}>Pie Chart</button>
+         {DisplayGraph}
+      </div>
     );
   }
 
