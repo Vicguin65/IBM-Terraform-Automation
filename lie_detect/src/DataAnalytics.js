@@ -3,6 +3,8 @@
 import React from 'react';
 import './styles.css'; // Import your CSS file
 import Plot from "react-plotly.js"
+import NetworkChart from './NetworkData.js';
+import PolygraphChart from './PolygraphData.js';
 
 const DataAnalytics = () => (
   <section id="data-analytics" className="section">
@@ -11,12 +13,14 @@ const DataAnalytics = () => (
       <p>Explore our data-driven insights and analytics.</p>
 
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
       <div id="graph" style={{width: '100%', height: '500px'}}>
         <Plot 
         data = {[{
           type: 'bar',
           x: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
-          y: [87.0, 13.0, 82.2, 17.8],}]}
+          y: [87.0, 13.0, 82.2, 17.8],}, 
+      ]}
         layout={{
           width: 1000, height: 700, 
           title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
@@ -115,18 +119,12 @@ const DataAnalytics = () => (
     </p>
 
   <div id="concluding-paragraph">
-    {/* style={{
-      display: 'block',
-      maxWidth: '1000px',
-      width: '1000px', 
-      marginTop: '100px', 
-      fontSize: '25px',}} */}
     <p className="conclusion" style={{
       display: 'block',
       maxWidth: '1000px',
       width: '1000px', 
       marginTop: '100px', 
-      fontSize: '25px',}}>
+      fontSize: '20px',}}>
     Using control question tests, polygraphs are mostly able to identify criminal and exclude innocents. However,
     a high false positive rate and false negative rate stil exist. Polygraphs can provide some insight into deceit
     but they may not be the most reliable tool for the most critical of situations in criminal cases. 
