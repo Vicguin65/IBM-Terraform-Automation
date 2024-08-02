@@ -68,7 +68,7 @@ const NetworkChart = () => {
       }
     ];
 
-    DisplayGraph() 
+    function DisplayGraph() 
     {
       if(graphType === "bar")
       {
@@ -106,9 +106,9 @@ const NetworkChart = () => {
 
     return(
       <div>
-         <button onClick={() => setChartType('bar')}>Bar Chart</button>
-         <button onClick={() => setChartType('pie')}>Pie Chart</button>
-         {DisplayGraph}
+         <button onClick={() => changeGraph('bar')}>Bar Chart</button>
+         <button onClick={() => changeGraph('pie')}>Pie Chart</button>
+         {DisplayGraph()}
       </div>
     );
   }

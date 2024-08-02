@@ -15,7 +15,8 @@ const DataAnalytics = () => (
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
       <div id="graph" style={{width: '100%', height: '500px'}}>
-        <Plot 
+        {<PolygraphChart />}
+        {/* <Plot 
         data = {[{
           type: 'bar',
           x: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
@@ -26,7 +27,7 @@ const DataAnalytics = () => (
           title: 'Polygraph Accuracy of Control Question Test in Criminal Cases',
           xaxis: {title: 'Test Accuracy'},
           yaxis: { title: 'Percentage of Outcome'}
-        }}/>
+        }}/> */}
         <p className="explanation">True Positive: Correctly identifying a deceptive subject.<br></br>
           True Negative: Correctly identifying a non-deceptive subject.<br></br>
           False Positive: Incorrectly identifying a non-deceptive subject as deceptive.<br></br>
@@ -38,7 +39,8 @@ const DataAnalytics = () => (
         {/* Second Graph */}
         <div className="neuralnetworks" id="networks"></div>
         {/* Graph based on neural network models for polygraph testing */}
-        <Plot
+        <NetworkChart />
+        {/* <Plot
          data = {[{
             name: 'Accuracy',
             x: ['ERNN', 'ANN', 'RNN', 'LSTM'],
@@ -75,7 +77,7 @@ const DataAnalytics = () => (
           yaxis: { title: 'Percentage', range: [90, 100] },
           xaxis: { title: 'Neural Network Type' },
          }}        
-        />
+        /> */}
     </div>
     <p className="explanation">
       The data in the graph showcases the efficiency of four common different neural network models 

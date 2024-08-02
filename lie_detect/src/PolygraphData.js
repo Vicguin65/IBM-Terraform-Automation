@@ -16,14 +16,14 @@ const PolygraphChart = () => {
       
     const pieData = [
       {
-        type: 'bar',
-        x: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
-        y: [87.0, 13.0, 82.2, 17.8]
+        type: 'pie',
+        labels: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
+        values: [87.0, 13.0, 82.2, 17.8]
       }
     ];
 
 
-    DisplayGraph()
+    function DisplayGraph()
     {
       if(graphType === "bar")
       {
@@ -57,9 +57,9 @@ const PolygraphChart = () => {
 
     return(
       <div>
-         <button onClick={() => setChartType('bar')}>Bar Chart</button>
-         <button onClick={() => setChartType('pie')}>Pie Chart</button>
-         {DisplayGraph}
+         <button onClick={() => changeGraph('bar')}>Bar Chart</button>
+         <button onClick={() => changeGraph('pie')}>Pie Chart</button>
+         {DisplayGraph()}
       </div>
     );
 }
