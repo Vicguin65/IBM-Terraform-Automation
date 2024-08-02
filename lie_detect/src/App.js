@@ -5,6 +5,7 @@ import DataAnalytics from './DataAnalytics'; // Import DataAnalytics component
 import Chatbot from './Chatbot'; // Import Chatbot component
 import About from './About';
 import Resources from './Resources';
+import MeetTheTeam from './MeetTheTeam'; // Import MeetTheTeam component
 
 // Header component with conditional rendering based on activeTab
 const Header = ({ activeTab, setActiveTab }) => (
@@ -16,13 +17,13 @@ const Header = ({ activeTab, setActiveTab }) => (
           <li><a href="#" className={activeTab === 'data-analytics' ? 'active' : ''} onClick={() => setActiveTab('data-analytics')}>Data & Analytics</a></li>
           <li><a href="#" className={activeTab === 'about' ? 'active' : ''} onClick={() => setActiveTab('about')}>About</a></li>
           <li><a href="#" className={activeTab === 'resources' ? 'active' : ''} onClick={() => setActiveTab('resources')}>Resources</a></li>
+          <li><a href="#" className={activeTab === 'meet-the-team' ? 'active' : ''} onClick={() => setActiveTab('meet-the-team')}>Meet the Team</a></li>
         </ul>
       </div>
     </nav>
   </header>
 );
 
-// Hero section component
 const HeroSection = () => (
   <section id="home" className="hero">
     <div className="container">
@@ -61,6 +62,7 @@ const App = () => {
       {activeTab === 'data-analytics' && <DataAnalytics />}
       {activeTab === 'about' && <About />}
       {activeTab === 'resources' && <Resources />}
+      {activeTab === 'meet-the-team' && <MeetTheTeam />}
       <Footer activeTab={activeTab} />
       <>
           <button className="chatbot-toggle-button" onClick={toggleChatbot}>
@@ -73,4 +75,3 @@ const App = () => {
 };
 
 export default App;
-
