@@ -1,0 +1,214 @@
+/* Import Nunito font */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+/* General styling for the header and footer */
+.header {
+    background-color: #f5f5f3; /* Default background color */
+    color: #28282A; /* Default text color */
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 2px solid black; /* Default border */
+}
+
+.footer {
+    background-color: #f5f5f3; /* Default background color */
+    color: #28282A; /* Default text color */
+    padding: 20px 0;
+    text-align: center;
+    
+}
+
+/* Dark mode styling */
+.dark-mode .header,
+.dark-mode .footer {
+    background-color: #948c8c; /* Dark mode background */
+    color: #fff; /* Dark mode text color */
+    border: none; /* Remove border in dark mode */
+}
+
+/* Specific styles for MeetTheTeam page */
+.meet-the-team-page .header,
+.meet-the-team-page .footer {
+    background-color: #948c8c; /* Background color for MeetTheTeam page */
+    color: #fff; /* Text color for header and footer in MeetTheTeam page */
+    border: none; /* Remove border only on MeetTheTeam page */
+}
+
+
+.meet-the-team-page .footer {
+    border-top: none; /* Remove top border on MeetTheTeam page */
+}
+
+/* MeetTheTeam page styling */
+.meet-the-team {
+    padding: 60px 0;
+    background-color: #948c8c; /* Background color for MeetTheTeam page */
+}
+
+.meet-the-team-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #fff; /* Title color */
+    font-family: 'Nunito', sans-serif; /* Apply Nunito font */
+}
+
+.team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.team-member {
+    background: #cececd; /* Background color for team member cards */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.3s ease-in-out;
+    color: #fff; /* Text color for team members */
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+}
+
+.team-member-photo {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 2px solid #fff; /* Border color for photos */
+}
+
+.team-member h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+    color: #4f4c54; /* Heading color */
+}
+
+.team-member p {
+    font-size: 16px;
+    color: #4f4c54; /* Light color for paragraphs */
+}
+
+/* Additional general styles (if needed) */
+body {
+    font-family: 'Nunito', sans-serif; /* Use Nunito font */
+    background-color: #f5f5f3; /* Background color */
+    color: #28282A; /* Font color */
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Example of responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .navbar .nav-links {
+        flex-direction: column;
+    }
+
+    .navbar .nav-links li {
+        margin: 10px 0;
+    }
+
+    .hero .hero-title {
+        font-size: 36px;
+    }
+
+    .section h2 {
+        font-size: 28px;
+    }
+
+    .section p {
+        font-size: 16px;
+    }
+}
+
+/* Chatbot styles (if needed) */
+#chatbot-root {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    max-width: 100%;
+    height: 400px;
+    background-color: #f5f5f3; /* Background color */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbot-header {
+    background-color: #948c8c; /* Background color */
+    color: #28282A; /* Updated font color */
+    padding: 10px;
+    text-align: center;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chatbot-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 0;
+    outline: none;
+}
+
+.chatbot-input button {
+    padding: 10px;
+    background-color: #7c7c74;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.chatbot-message {
+    margin-bottom: 10px;
+}
+
+.chatbot-message.user {
+    text-align: right;
+}
+
+.chatbot-message.bot {
+    text-align: left;
+}
+
+.chatbot-toggle-button {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #8c8c8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chatbot-toggle-button:hover {
+    background-color: #8c8c8a;
+}
+
+
+

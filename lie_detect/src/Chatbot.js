@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WebChatContainer, setEnableDebug } from '@ibm-watson/assistant-web-chat-react';
 import axios from 'axios';
-import './Chatbot.css';
+import './styles.css';
 
 // Enable debug mode for Watson Assistant Web Chat
 setEnableDebug(true);
@@ -111,14 +111,12 @@ class Chatbot extends Component {
 
     return (
       <div className={`chatbot ${isOpen ? 'open' : ''}`}>
-        <div className="chatbot-content">
           <div className="chatbot-header" onClick={this.props.toggleChatbot}>
           </div>
           {isOpen && (
             <WebChatContainer config={webChatOptions} />
           )}
         </div>
-      </div>
     );
   }
 }
