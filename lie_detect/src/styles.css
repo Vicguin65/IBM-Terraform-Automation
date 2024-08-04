@@ -10,15 +10,9 @@
 
 /* Basic styling */
 body {
-<<<<<<< Updated upstream
-    font-family: 'Roboto', sans-serif; /* Use Roboto font */
-    background-color: #333333; /* Updated background color */
-    color: #a3a190; /* Updated font color */
-=======
     font-family: 'Clarkson', sans-serif; /* Use Clarkson font */
     background-color: #f5f5f3; /* Background color */
     color: #28282A; /* Updated font color */
->>>>>>> Stashed changes
     line-height: 1.6;
     margin: 0;
 }
@@ -100,13 +94,8 @@ body {
 }
 
 .hero {
-<<<<<<< Updated upstream
-    background-color: #333333; /* Updated background color */
-    color: #a3a190; /* Updated font color */
-=======
     background-color: #f5f5f3; /* Background color */
     color: #28282A; /* Updated font color */
->>>>>>> Stashed changes
     padding: 100px 0;
     text-align: center;
 }
@@ -234,13 +223,8 @@ h2 {
 
 
 .footer {
-<<<<<<< Updated upstream
-    background-color: #333333; /* Updated background color */
-    color: #a3a190; /* Updated font color */
-=======
     background-color: #f5f5f3; /* Background color */
     color: #28282A; /* Updated font color */
->>>>>>> Stashed changes
     padding: 20px 0;
     text-align: center;
 }
@@ -294,13 +278,8 @@ h2 {
 }
 
 .chatbot-header {
-<<<<<<< Updated upstream
-    background-color: #333;
-    color: #fff;
-=======
     background-color: #f5f5f3; /* Background color */
     color: #28282A; /* Updated font color */
->>>>>>> Stashed changes
     padding: 10px;
     text-align: center;
 }
@@ -366,13 +345,6 @@ h2 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-<<<<<<< Updated upstream
-  }
-  
-  .chatbot-toggle-button:hover {
-    background-color: #333;
-  }
-=======
 }
 
 .chatbot-toggle-button:hover {
@@ -408,4 +380,3 @@ body:not(.dark-mode) .footer {
     color: #28282A; /* Default text color */
 }
 
->>>>>>> Stashed changes
