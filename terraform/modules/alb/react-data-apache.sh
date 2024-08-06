@@ -6,8 +6,8 @@ sudo apt-get install -y npm
 
 # Clone the repository
 cd /home/ubuntu
-sudo git clone https://github.com/Vicguin65/IBM-Identity-Center-API.git
-cd IBM-Identity-Center-API/lie_detect
+sudo git clone https://github.com/Vicguin65/IBM-Terraform-Automation.git
+cd IBM-Terraform-Automation/lie_detect
 
 # Install dependencies and build the React app
 sudo npm install
