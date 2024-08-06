@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WebChatContainer, setEnableDebug } from '@ibm-watson/assistant-web-chat-react';
 import axios from 'axios';
-import './styles.css';
+import './Chatbot.css';
 
 // Enable debug mode for Watson Assistant Web Chat
 setEnableDebug(true);
@@ -80,24 +80,47 @@ class Chatbot extends Component {
     }
   }
 
+  addMessage = (text, sender) => {
+    const newMessage = { text, sender };
+    this.setState((prevState) => ({
+      messages: [...prevState.messages, newMessage],
+    }));
+  };
+
+  handleUserInput = (userInput) => {
+    if (userInput.trim() !== '') {
+      this.addMessage(userInput, 'user');
+      this.sendMessageToWatson(userInput);
+    }
+  };
+
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      this.handleSubmit();
+    }
+  };
+
+  handleSubmit = () => {
+    const userInput = this.input.value;
+    this.handleUserInput(userInput);
+    this.input.value = '';
+  };
+
   render() {
-    const { isOpen, activeTab } = this.props;
+    const { isOpen } = this.props;
 
     return (
       <div className={`chatbot ${isOpen ? 'open' : ''}`}>
-        <div 
-          className={`chatbot-header ${activeTab === 'meet-the-team' ? 'chatbot-header-meet-the-team' : 'chatbot-header-default'}`} 
-          onClick={this.props.toggleChatbot}
-        >
-          {/* You can add custom content here or leave it empty */}
+        <div className="chatbot-content">
+          <div className="chatbot-header" onClick={this.props.toggleChatbot}>
+          </div>
+          {isOpen && (
+            <WebChatContainer config={webChatOptions} />
+          )}
         </div>
-        {isOpen && (
-          <WebChatContainer config={webChatOptions} />
-        )}
       </div>
     );
   }
 }
 
 export default Chatbot;
-

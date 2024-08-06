@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles.css'; // Import your CSS file
-import Plot from "react-plotly.js";
+import NetworkChart from './NetworkData.js';
+import PolygraphChart from './PolygraphData.js';
 
 const DataAnalytics = () => (
   <section id="data-analytics" className="section">
@@ -112,9 +113,10 @@ const DataAnalytics = () => (
       </div>
 
       <div id="concluding-paragraph">
-        <p className="conclusion" style={{
+        <p style={{
           display: 'block',
           maxWidth: '1000px',
+          marginTop: '100px',
           width: '1000px', 
           marginTop: '100px', 
           fontSize: '20px',
@@ -126,7 +128,6 @@ const DataAnalytics = () => (
           will still remain a useful tool in lie detection.<br />
         </p>
       </div>
-    </div>
   </section>
 );
 

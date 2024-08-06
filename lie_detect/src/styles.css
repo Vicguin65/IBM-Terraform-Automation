@@ -202,11 +202,6 @@ h2 {
     color: #28282A; /* Updated font color */
 }
 
-/* For Graphs */
-.explanation {
-    text-align: left;
-}
-
 /* Resources */
 .resources {
     text-align: left;
@@ -348,7 +343,7 @@ h2 {
 }
 
 .chatbot-toggle-button:hover {
-    background-color: #8c8c8a;
+    background-color: #333;
 }
 
 .data-analytics-title {
