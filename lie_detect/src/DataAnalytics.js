@@ -11,8 +11,9 @@ const DataAnalytics = () => (
 
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-      <div id="graph" style={{width: '100%', height: '500px'}}>
+      <div id="graph" style={{width: '100%', height: '500px', marginBottom: '20px',}}>
         {<PolygraphChart />}
+      
         <p className="explanation">True Positive: Correctly identifying a deceptive subject.<br></br>
           True Negative: Correctly identifying a non-deceptive subject.<br></br>
           False Positive: Incorrectly identifying a non-deceptive subject as deceptive.<br></br>
