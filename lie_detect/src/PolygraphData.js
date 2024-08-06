@@ -1,16 +1,19 @@
 import React, {useState} from 'react';
 import './styles.css';
+import './Data.css';
 import Plot from "react-plotly.js";
 
 const PolygraphChart = () => {
 
    const [graphType, changeGraph] = useState("bar");
 
+   const colors = [['#0077b6', '#00b4d8', '#90e0ef', '#caf0f8']];
+
     const barData = [
       {
         type: "bar",
         x: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
-        y: [87.0, 13.0, 82.2, 17.8]
+        y: [87.0, 13.0, 82.2, 17.8],
       },
     ];
       
@@ -18,7 +21,8 @@ const PolygraphChart = () => {
       {
         type: 'pie',
         labels: ["True Positive Rate", "False Negative Rate", "True Negative Rate", "False Positive Rate"],
-        values: [87.0, 13.0, 82.2, 17.8]
+        values: [87.0, 13.0, 82.2, 17.8],
+        marker: { colors: colors[0] },
       }
     ];
 
@@ -57,8 +61,8 @@ const PolygraphChart = () => {
 
     return(
       <div>
-         <button onClick={() => changeGraph('bar')}>Bar Chart</button>
-         <button onClick={() => changeGraph('pie')}>Pie Chart</button>
+         <button className="graphChange" onClick={() => changeGraph('bar')}>Bar Chart</button>
+         <button className="graphChange" onClick={() => changeGraph('pie')}>Pie Chart</button>
          {DisplayGraph()}
       </div>
     );

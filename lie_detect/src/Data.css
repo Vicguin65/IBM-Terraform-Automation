@@ -1,0 +1,23 @@
+/* Data.css*/
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+
+.graphChange {
+    padding: 20px;
+    margin-right: 10px;
+    font-size: 18px;
+    background-color: #8c8c8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.graphChange:hover{
+    background-color: #333;
+}
