@@ -6,7 +6,6 @@
     margin-bottom: 20px;
 }
 
-
 .graphChange {
     padding: 20px;
     margin-right: 10px;
@@ -20,4 +19,39 @@
 
 .graphChange:hover{
     background-color: #333;
+}
+
+
+
+/*Graph Layout*/
+.graphcontainer {
+    display: flex; /* Use flexbox for layout */
+    align-items: flex-start; /* Align items to the top */
+}
+
+.graph {
+    flex: 1;
+    height: 500px;
+}
+
+.textContainer {
+    padding-top: 55px;
+}
+
+p.explanation {
+    flex: 2;
+    font-family: 'Garamond', serif;
+    padding: 30px;
+    padding-top: 100px;
+    text-align: left;
+    max-width: 400px;
+    line-height: 3.0;
+}
+
+p.networkexplanation {
+    flex: 2;
+    font-family: 'Garamond', serif;
+    padding-right: 10px;
+    text-align: left;
+    max-width: 400px;
 }

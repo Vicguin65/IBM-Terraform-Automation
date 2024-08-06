@@ -104,18 +104,6 @@ const NetworkChart = () => {
               title: 'Performance of Four Neural Network Models in Lie Detection',
               yaxis: { title: 'Percentage', range: [90, 100] },
               xaxis: { title: 'Neural Network Type' },
-
-          //     annotations: [{ text: 'Precision',
-          //     showarrow: false,
-          //     align: 'center',
-          //     x: 0.8,
-          //     y: 1.2,
-          //     xref: 'paper',
-          //     yref: 'paper',
-          //     font: {
-          //         size: 24
-          //     }
-          // }],
             }}
           />
         );
