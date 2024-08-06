@@ -14,11 +14,24 @@ const DataAnalytics = () => (
           {<PolygraphChart />}
         </div>
         <div className="textContainer">
-          <p className="explanation">True Positive: Correctly identifying a deceptive subject.<br></br>
-            True Negative: Correctly identifying a non-deceptive subject.<br style={{marginBottom: '40px'}}></br>
-            False Positive: Incorrectly identifying a non-deceptive subject as deceptive.<br style={{marginBottom: '40px'}}></br>
-            False Negative: Incorrectly identifying a deceptive subject as non-deceptive.<br style={{marginBottom: '40px'}}></br>
-          </p>
+          <p className="explanation">
+           The data in the study focuses on evaluating the accuracy of the Control Question Test (CQT)
+           polygraph in criminal cases by testing with deceptive and truthful participants. <br></br><br></br>
+            <ul>
+            <li> 
+            True Positive: Correctly identifying a deceptive subject.<br></br>
+            </li>
+            <li>
+            True Negative: Correctly identifying a non-deceptive subject.<br></br>
+            </li> 
+            <li>
+            False Positive: Incorrectly identifying a non-deceptive subject as deceptive.<br></br>
+            </li>
+            <li>
+            False Negative: Incorrectly identifying a deceptive subject as non-deceptive.<br></br>
+            </li>
+          </ul>
+          </p>       
         </div>
       </div>
 

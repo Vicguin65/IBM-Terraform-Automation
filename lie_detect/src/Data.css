@@ -10,6 +10,7 @@
     padding: 20px;
     margin-right: 10px;
     font-size: 18px;
+    font-family: 'Nunito', sans-serif;
     background-color: #8c8c8a;
     color: white;
     border: none;
@@ -41,11 +42,11 @@
 p.explanation {
     flex: 2;
     font-family: 'Garamond', serif;
-    padding: 30px;
+    font-size: 22px;
     padding-top: 100px;
+    padding-right: 10px;
     text-align: left;
     max-width: 400px;
-    line-height: 3.0;
 }
 
 p.networkexplanation {
