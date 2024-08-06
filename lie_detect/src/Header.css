@@ -1,9 +1,9 @@
 /* Ensure header spans the full width and has a background color and border */
 .header {
     width: 100%;
-    background-color: #f8f9fa; /* Adjust background color as needed */
-    border-bottom: 10px solid #ccc; /* Add a bottom border */
-    padding-bottom: 5px; /* Adds space below the content to make the border appear higher */
+    background-color: #f8f9fa; /* Background color */
+    border-bottom: 10px solid #ccc; /* Bottom border */
+    padding-bottom: 5px; /* Space below the content */
 }
 
 /* Center the navbar content horizontally */
@@ -32,29 +32,45 @@
 
 /* Adjust spacing between navigation items */
 .nav-links li {
-    margin: 0 10px; /* Reduced spacing between navigation items */
+    margin: 0 45px; /* Spacing between navigation items */
 }
 
 /* Style for links and buttons */
 .nav-links a,
 .nav-links button {
     text-decoration: none;
-    color: #333; /* Adjust text color */
+    color: #333; /* Text color */
     font-weight: bold;
-    padding: 8px 15px; /* Adjust padding for better spacing */
+    padding: 8px 15px; /* Padding for better spacing */
     border: none;
     background: none;
     cursor: pointer;
+    position: relative; /* Required for pseudo-element positioning */
 }
 
-/* Style for buttons */
-.nav-links button {
-    background-color: #007bff; /* Button background color */
-    color: white;
-    border-radius: 5px; /* Rounded corners */
-}
-
-/* Hover effect for buttons */
+/* Add black underline on hover */
+.nav-links a:hover,
 .nav-links button:hover {
-    background-color: #0056b3; /* Button hover color */
+    color: #333; /* Maintain text color on hover */
 }
+
+.nav-links a::after,
+.nav-links button::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px; /* Thickness of the underline */
+    background-color: #000; /* Black color for the underline */
+    transform: scaleX(0); /* Initially hide the underline */
+    transform-origin: bottom right;
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.nav-links a:hover::after,
+.nav-links button:hover::after {
+    transform: scaleX(1); /* Show the underline on hover */
+    transform-origin: bottom left;
+}
+
