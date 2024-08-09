@@ -33,7 +33,7 @@ output: hostname.com
 ## Infrastructure
 
 The infrastructure is as below:
-[Infrastructure image](https://github.com/Vicguin65/IBM-Terraform-Automation/blob/main/infrastructureDiagram.png?raw=true)
+![Infrastructure image](infrastructureDiagram.png)
 
 ## About
 
