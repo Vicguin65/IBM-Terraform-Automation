@@ -1,26 +1,8 @@
-# Identity Center API
+# IBM Terraform Automation
 
-AWS's IAM Identity Center [SCIM API](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) does not provide a user with certian functionalites. Consequently, it is recommendeed to go through the SDK. Exaples of the SCIM API limitations include paginated requests for ListUsers and certain requests that exist in Identity Store SDK functions do not exist in the SCIM API. Therefore, this project aims to build a REST API to to replicate the current SDK.
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
-## Installation
-
-Create a python virtual environment.
-
-```bash
-python -m venv .\venv
-```
-
-Activate the virtual environment.
-
-```bash
-venv\Scripts\activate.bat
-```
-
-Download the Python libraries.
-
-```bash
-pip install -r requirements.txt
-```
+IBM Terraform Automation is a project that automates the building of a network and the deployment of a web application using [Terraform](https://developer.hashicorp.com/terraform/intro). Specifically, this project deploys a React application on an [AWS VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html).
 
 ## Prerequisites
 
@@ -28,31 +10,34 @@ Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-start
 
 Setup [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 
-Install [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
+Install [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-## Setup
+## Usage
 
-Change directory to identity-store-lambda
+In main.tf, change the backend to fit your needs.
 
-```bash
-cd identity-store-lambda
+After running the below:
+
+```
+terraform init
+terraform plan
+terraform apply
 ```
 
-Build with sam build
+The terminal should have output containing the domain name of the application:
 
-```bash
-sam build
+```
+output: hostname.com
 ```
 
-Deploy sam guided
+## Infrastructure
 
-```bash
-sam deploy --guided
-```
+The infrastructure is as below:
+![Infrastructure image](infrastructureDiagram.png)
 
-## Verification
+## About
 
-Visit API Gateway on the AWS Console to see the endpoint URL.
+This project was developed in under 3 months. This project was made for the [Rensselaer Center for Open Source](https://new.rcos.io/). The project was developed by [Hazel Yu](https://www.linkedin.com/in/hazel-yu-a13b9b26a/), [Ritika Brahmadesam](https://www.linkedin.com/in/bcritika/), [Tyler Du](https://www.linkedin.com/in/tyler-du-link/), [Arnav Mukherjee](https://www.linkedin.com/in/arnav-mukherjee-874a38292/) mentored by IBM Principal Cloud Architect [Pandikumar(Kumar) Swamikrishnan](https://www.linkedin.com/in/pandikumar-swamikrishnan/).
 
 ## License
 
