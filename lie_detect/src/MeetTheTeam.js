@@ -10,13 +10,13 @@ const teamMembers = [
   },
   {
     name: "Tyler Du",
-    title: "DevOps Engineer & Network Engineer",
+    title: "DevOps & Network Engineer",
     photo: require("./assets/IMG_8934.jpeg"),
     bio: "Hi, this is Tyler! I am an undergraduate studying Computer Science graduating in Spring 2025. I am from the Biggest Little City in the World, Reno, Nevada[https://www.reno.gov/]. This is my third semester with RCOS! I spend lots of my free time playing a trading card game called Cardfight Vanguard[https://en.cf-vanguard.com/]."
   },
   {
     name: "Ritika Brahmadesam",
-    title: "DevOps Engineer & Network Engineer",
+    title: "DevOps & Network Engineer",
     photo: require("./assets/IMG_7842_copy_2.jpg"),
     bio: "Hi I’m Ritika, I am a Mathematics and Computer Science Major at RPI with a minor in Economics. This is my third semester with the Rensselaer Center for Open Source. During my free time I like to swim, play my violin, and read. I am currently reading The Way of Kings by Brandon Sanderson. I really enjoy getting a sweet treat, specifically anything with peanut butter or chocolate, or even better both!"
   },
